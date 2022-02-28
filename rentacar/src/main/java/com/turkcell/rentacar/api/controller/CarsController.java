@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.turkcell.rentacar.business.abstracts.CarService;
-import com.turkcell.rentacar.business.dtos.CarDto;
+import com.turkcell.rentacar.business.dtos.CarByIdDto;
 import com.turkcell.rentacar.business.dtos.CarListDto;
 
 import com.turkcell.rentacar.business.requests.CreateCarRequest;
@@ -18,6 +18,8 @@ import com.turkcell.rentacar.business.requests.CreateCarRequest;
 import com.turkcell.rentacar.business.requests.UpdateCarRequest;
 
 import com.turkcell.rentacar.core.exceptions.BusinessException;
+import com.turkcell.rentacar.core.utilities.results.DataResult;
+import com.turkcell.rentacar.core.utilities.results.Result;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -25,36 +27,51 @@ import com.turkcell.rentacar.core.exceptions.BusinessException;
 public class CarsController {
 	private CarService carService;
 
-	public CarsController(CarService carService) {
-		
-		this.carService = carService;
-	}
-	
-	@GetMapping("/getall")
-	public List<CarListDto> getAll(){
-		return this.carService.getAll();
-	}
-	
-	@PostMapping("/add")
-	public void add(@RequestBody CreateCarRequest createcarRequest) throws BusinessException {
+    public CarsController(CarService carService) {
 
-		this.carService.add(createcarRequest);
-	}
-	
-	@GetMapping("/getbyid")
-	public CarDto getById(@RequestParam(required = true) int carId){
-		return this.carService.getById(carId);
-	}
-	
-	@PostMapping("/update")
-	public void update(@RequestBody UpdateCarRequest updatecarRequest) throws BusinessException {
-		this.carService.update(updatecarRequest);
-	}
-	
-	@PostMapping("/deletebyid")
-	public void deleteById(@RequestBody int carId) {
-		this.carService.deleteById(carId);
-	}
+        this.carService = carService;
+    }
 
+    @GetMapping("/getall")
+    public DataResult<List<CarListDto>> getAll() {
+        return this.carService.getAll();
+    }
+
+    @PostMapping("/add")
+    public Result add(@RequestBody CreateCarRequest createcarRequest) throws BusinessException {
+
+        return this.carService.add(createcarRequest);
+    }
+
+    @GetMapping("/getbyid")
+    public DataResult<CarByIdDto> getById(@RequestParam(required = true) int carId) {
+        return this.carService.getById(carId);
+    }
+
+    @PostMapping("/update")
+    public Result update(@RequestBody UpdateCarRequest updatecarRequest) throws BusinessException {
+        return this.carService.update(updatecarRequest);
+    }
+
+    @PostMapping("/deletebyid")
+    public Result deleteById(int carId) {
+
+        return this.carService.deleteById(carId);
+    }
+
+    @GetMapping("/getAllPaged")
+    public DataResult<List<CarListDto>> getAllPaged(int pageNo, int pageSize) {
+        return this.carService.getAllPaged(pageNo, pageSize);
+    }
+
+    @GetMapping("/getAllSorted")
+    public DataResult<List<CarListDto>> getAllSorted(String ascOrDesc) {
+        return this.carService.getAllSorted(ascOrDesc);
+    }
+
+    @GetMapping("/sortAllByDailyPrice")
+    public DataResult<List<CarListDto>> getByDailyPriceIsLessThanEqual(double dailyPrice) {
+        return this.carService.getByDailyPriceIsLessThanEqual(dailyPrice);
+    }
 	
 }
