@@ -21,4 +21,5 @@ public interface CarRentalService {
     Result delete(DeleteCarRentalRequest deleteCarRentalRequest);
     DataResult<List<CarRentalListDto>> getByCarId(int id);
     DataResult<CarRental> getByCar_CarIdAndReturnDate(int carId,Date returnDate);
+    DataResult<Double> calculatePrice(CreateCarRentalRequest createCarRentalRequest);
 }

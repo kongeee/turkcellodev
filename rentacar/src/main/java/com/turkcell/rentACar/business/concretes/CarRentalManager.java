@@ -1,5 +1,7 @@
 package com.turkcell.rentACar.business.concretes;
 
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.turkcell.rentACar.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentACar.business.abstracts.CarRentalService;
-import com.turkcell.rentACar.business.dtos.CarMaintenanceListDto;
 import com.turkcell.rentACar.business.dtos.CarRentalDto;
 import com.turkcell.rentACar.business.dtos.CarRentalListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateCarRentalRequest;
@@ -20,7 +21,6 @@ import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
 import com.turkcell.rentACar.core.utilities.results.ErrorDataResult;
-import com.turkcell.rentACar.core.utilities.results.ErrorResult;
 import com.turkcell.rentACar.core.utilities.results.Result;
 import com.turkcell.rentACar.core.utilities.results.SuccessDataResult;
 import com.turkcell.rentACar.core.utilities.results.SuccessResult;
@@ -83,6 +83,17 @@ public class CarRentalManager implements CarRentalService {
 	public DataResult<CarRental> getByCar_CarIdAndReturnDate(int carId, Date returnDate) {
 		return new SuccessDataResult<CarRental>(this.carRentalDao.getByCar_CarIdAndReturnDate(carId,returnDate));
 	}
+
+	@Override
+	public DataResult<Double> calculatePrice(CreateCarRentalRequest createCarRentalRequest) {
+
+		CarRental carRental =this.modelMapperService.forRequest().map(createCarRentalRequest,CarRental.class);
+		
+		long days = ChronoUnit.DAYS.between(createCarRentalRequest.getStartDate(), carRental.getReturnDate());
+		double result = days * carRental.getCar().getCarDailyPrice() + calculateExtraPriceByCityDistance(carRental);
+		return new SuccessDataResult<Double>(result, "Total Price");
+		
+	}
 	
 	private Result rent(int carId) throws BusinessException {
 	var result=	this.carMaintenanceService.getByCar_CarIdAndReturnDate(carId,null);
@@ -92,4 +103,15 @@ public class CarRentalManager implements CarRentalService {
 		}
 		throw new BusinessException("in car maintenance");
 	}
+
+	private double calculateExtraPriceByCityDistance(CarRental carRental){
+		
+
+		if(carRental.getStartCityName().equals(carRental.getEndCityName())){
+			return 0;
+		}
+		return 750;
+	}
+
+	
 }

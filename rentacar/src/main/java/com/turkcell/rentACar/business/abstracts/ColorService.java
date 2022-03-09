@@ -8,7 +8,6 @@ import com.turkcell.rentACar.business.requests.updates.UpdateColorRequest;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
 import com.turkcell.rentACar.core.utilities.results.Result;
-import com.turkcell.rentACar.entities.concretes.Color;
 
 import java.util.List;
 

@@ -21,4 +21,16 @@ public class CreateCarRentalRequest {
     @NotNull
     @NotBlank
     private LocalDate startDate;
+
+    @NotNull
+    @NotBlank
+    private LocalDate returnDate;
+
+    @NotNull
+    @NotBlank
+    private String startCityName;
+
+    @NotNull
+    @NotBlank
+    private String endCityName;
 }

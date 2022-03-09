@@ -2,6 +2,7 @@ package com.turkcell.rentACar.api.controllers;
 
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,4 +55,10 @@ public class CarRentalController {
 	DataResult<List<CarRentalListDto>> getByCarId(@RequestParam int id) {
 		return carRentalService.getByCarId(id);
 	}
+
+	@PostMapping("/calculatePrice")
+	DataResult<Double> calculatePrice(@RequestBody CreateCarRentalRequest createCarRentalRequest){
+		return carRentalService.calculatePrice(createCarRentalRequest);
+	}
+
 }

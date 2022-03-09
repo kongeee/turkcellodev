@@ -13,5 +13,7 @@ public class CarRentalDto {
     private int carRentalId;
     private LocalDate startDate;
     private LocalDate returnDate;
+    private String startCityName;
+    private String endCityName;
     private int carId;
 }

@@ -1,7 +1,6 @@
 package com.turkcell.rentACar.business.requests.creates;
 
-import com.turkcell.rentACar.entities.concretes.Brand;
-import com.turkcell.rentACar.entities.concretes.Color;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
