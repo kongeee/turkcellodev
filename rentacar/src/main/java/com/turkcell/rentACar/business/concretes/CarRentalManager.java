@@ -121,8 +121,27 @@ public class CarRentalManager implements CarRentalService {
 	@Override
 	public Result rentForCorporateCustomer(
 		CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) {
-		// TODO Auto-generated method stub
-		return null;
+			checkIfCarExistsById(createCarRentalForCorporateCustomerRequest.getCarId());
+			checkIfCarMaintenance(createCarRentalForCorporateCustomerRequest.getCarId());
+			checkIfItCanBeRented(createCarRentalForCorporateCustomerRequest.getStartDate(), createCarRentalForCorporateCustomerRequest.getReturnDate(), createCarRentalForCorporateCustomerRequest.getCarId());
+	
+			var price = calculatePrice(createCarRentalForCorporateCustomerRequest.getCarId(), createCarRentalForCorporateCustomerRequest.getStartDate(), createCarRentalForCorporateCustomerRequest.getReturnDate(),
+			createCarRentalForCorporateCustomerRequest.getAdditionalServiceIds(),
+			createCarRentalForCorporateCustomerRequest.getStartCity(),
+			createCarRentalForCorporateCustomerRequest.getEndCity());
+	
+			CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForCorporateCustomerRequest, CarRental.class);
+			carRental.setCarRentalId(0);
+			carRental.setPrice(price);
+			carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+	
+			this.carRentalDao.save(carRental);
+	
+			carRental= this.carRentalDao.getByRecentlyAddedVehicleId(createCarRentalForIndividualCustomerRequest.getCarId());
+	
+			insertAddtionalServices(createCarRentalForIndividualCustomerRequest.getAdditionalServiceIds(),carRental.getCarRentalId());
+	
+			return new SuccessResult("Car Rental Added Successfully");
 	}
 
 	@Override
