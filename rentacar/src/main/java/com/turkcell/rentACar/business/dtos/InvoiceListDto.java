@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceDto {
+public class InvoiceListDto {
     
 	private int invoiceId;
 	private LocalDate creationDate;

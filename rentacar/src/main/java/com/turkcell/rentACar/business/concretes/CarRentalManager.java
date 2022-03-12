@@ -20,6 +20,7 @@ import com.turkcell.rentACar.business.dtos.CarRentalDto;
 import com.turkcell.rentACar.business.dtos.CarRentalListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateCarRentalRequest;
 import com.turkcell.rentACar.business.requests.creates.CreateOrderedAdditionalServiceRequest;
+import com.turkcell.rentACar.business.requests.creates.CreeateCarRentalForIndividualCustomerRequest;
 import com.turkcell.rentACar.business.requests.deletes.DeleteCarRentalRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalRequest;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
@@ -90,6 +91,37 @@ public class CarRentalManager implements CarRentalService {
 	}
 
 	@Override
+	public Result rentForIndividualCustomer(
+			CreeateCarRentalForIndividualCustomerRequest creeateCarRentalForIndividualCustomerRequest) {
+		
+				checkIfCarExistsById(creeateCarRentalForIndividualCustomerRequest.getCarId());
+				checkIfCarMaintenance(creeateCarRentalForIndividualCustomerRequest.getCarId());
+				checkIfItCanBeRented(creeateCarRentalForIndividualCustomerRequest.getStartDate(), creeateCarRentalForIndividualCustomerRequest.getReturnDate(), creeateCarRentalForIndividualCustomerRequest.getCarId());
+		
+				var price = calculatePrice();
+		
+				CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
+				carRental.setCarRentalId(0);
+				carRental.setPrice(price.getData());
+				carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+		
+				this.carRentalDao.save(carRental);
+		
+				carRental= this.carRentalDao.getByRecentlyAddedVehicleId(createCarRentalRequest.getCarId());
+		
+				insertAddtionalServices(createCarRentalRequest.getAddtionalServicesId(),carRental.getCarRentalId());
+		
+				return new SuccessResult("Car Rental Added Successfully");
+	}
+
+	@Override
+	public Result rentForCorporateCustomer(
+			CreeateCarRentalForIndividualCustomerRequest creeateCarRentalForCorporateCustomerRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException 
 	{
 		checkIfCarExistsById(updateCarRentalRequest.getCarId());
@@ -157,8 +189,26 @@ public class CarRentalManager implements CarRentalService {
 		price += calculateAdditionalServicePrice(days,additionalServices.getData());
 
 		return new SuccessDataResult<Double>(price, "Total Price");
-
 	}
+	
+
+	private double calculatePrice(int carId, LocalDate startDate, LocalDate returnDate, List<Integer> additionalServiceIds, String startCity, String endCity) throws BusinessException{
+		
+		CarListDto car = this.carService.getById(carId).getData();
+
+		long days = findTheNumberOfDaysToRent(startDate, returnDate);
+
+		var additionalServices = this.additionalServiceService.getAdditionalServicesByIds(additionalServiceIds);
+
+		double price = days * car.getCarDailyPrice() + calculateExtraPriceByCityDistance(startCity, endCity);
+
+		price += calculateAdditionalServicePrice(days,additionalServices.getData());
+
+		return price;
+	}
+
+
+
 	
 	@Override
 	public DataResult<CarRentalDto> getById(int id) 
@@ -181,11 +231,10 @@ public class CarRentalManager implements CarRentalService {
 		}
 	}
 
-	private boolean checkIfItCanBeRented(CreateCarRentalRequest createCarRentalRequest) throws BusinessException 
+	private boolean checkIfItCanBeRented(LocalDate startDate, LocalDate returnDate, int carId) throws BusinessException 
 	{
 		var result = this.carRentalDao.getRentalInformationOfTheVehicleOnTheSpecifiedDate(
-				createCarRentalRequest.getStartDate(), createCarRentalRequest.getReturnDate(),
-				createCarRentalRequest.getCarId());
+			startDate, returnDate, carId);
 		if (result.size() > 0) 
 		{
 			throw new BusinessException("Rented between the dates specified in the vehicle");
@@ -212,9 +261,9 @@ public class CarRentalManager implements CarRentalService {
 		throw new BusinessException("in car maintenance");
 	}
 
-	private double calculateExtraPriceByCityDistance(CarRental carRental) 
+	private double calculateExtraPriceByCityDistance(String startCity, String endCity) 
 	{
-		if (carRental.getStartCityName().equals(carRental.getEndCityName())) 
+		if (startCity.equals(endCity)) 
 		{
 			return 0;
 		}
@@ -242,5 +291,7 @@ public class CarRentalManager implements CarRentalService {
 	{
 		this.carRentalDao.getById(carRentalId);
 	}
+
+
 
 }

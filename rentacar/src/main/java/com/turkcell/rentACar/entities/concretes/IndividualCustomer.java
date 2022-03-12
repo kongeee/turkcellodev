@@ -2,12 +2,8 @@ package com.turkcell.rentACar.entities.concretes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import org.springframework.context.annotation.Lazy;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 @PrimaryKeyJoinColumn(name="individual_customer_id",referencedColumnName = "customer_id")
 @Data
-@Lazy
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
