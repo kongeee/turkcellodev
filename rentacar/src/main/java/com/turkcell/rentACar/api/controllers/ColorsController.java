@@ -16,30 +16,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/colors")
 public class ColorsController {
-    private ColorService colorService;
+	private ColorService colorService;
 
-    public ColorsController(ColorService colorService) {
-        this.colorService = colorService;
-    }
+	public ColorsController(ColorService colorService) {
+		this.colorService = colorService;
+	}
 
-    @GetMapping("/getAll")
-    DataResult<List<ColorListDto>> getAll(){
-        return this.colorService.getAll();
-    }
-    @GetMapping("/getById")
-    public DataResult<ColorDto> getById(@RequestParam int id){return this.colorService.getById(id);}
-    @PostMapping("/add")
-    public Result add(@RequestBody CreateColorRequest createColorRequest) throws BusinessException {
-        return this.colorService.add(createColorRequest);
-    }
-    @PutMapping("/update")
-    public Result update(@RequestBody UpdateColorRequest updateColorRequest) throws BusinessException{
-       return this.colorService.update(updateColorRequest);
-    }
+	@GetMapping("/getAll")
+	DataResult<List<ColorListDto>> getAll() {
+		return this.colorService.getAll();
+	}
 
-    @DeleteMapping("/delete")
-    public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) throws BusinessException{
-        return this.colorService.delete(deleteColorRequest);
-    }
+	@GetMapping("/getById")
+	public DataResult<ColorDto> getById(@RequestParam int id) throws BusinessException {
+		return this.colorService.getById(id);
+	}
+
+	@PostMapping("/add")
+	public Result add(@RequestBody CreateColorRequest createColorRequest) throws BusinessException {
+		return this.colorService.add(createColorRequest);
+	}
+
+	@PutMapping("/update")
+	public Result update(@RequestBody UpdateColorRequest updateColorRequest) throws BusinessException {
+		return this.colorService.update(updateColorRequest);
+	}
+
+	@DeleteMapping("/delete")
+	public Result delete(@RequestBody DeleteColorRequest deleteColorRequest) throws BusinessException {
+		return this.colorService.delete(deleteColorRequest);
+	}
 
 }

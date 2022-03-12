@@ -13,18 +13,18 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "car_maintenances")
 public class CarMaintenance {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "maintenance_id")
-    private int maintenanceId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "maintenance_id")
+	private int maintenanceId;
 
-    @Column(name = "maintenance_description")
-    private String maintenanceDescription;
+	@Column(name = "maintenance_description")
+	private String maintenanceDescription;
 
-    @Column(name = "return_date")
-    private LocalDate returnDate;
+	@Column(name = "return_date")
+	private LocalDate returnDate;
 
-    @ManyToOne
-    @JoinColumn(name="car_id")
-    private Car car;
+	@ManyToOne
+	@JoinColumn(name = "car_id")
+	private Car car;
 }

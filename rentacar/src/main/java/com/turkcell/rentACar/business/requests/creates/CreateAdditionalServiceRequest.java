@@ -20,12 +20,4 @@ public class CreateAdditionalServiceRequest {
     @NotNull
     @Min(0)
     private double dailyPrice;
-
-    @NotNull
-    @Size(min = 2)
-    private String startCityName;
-    
-    @NotNull
-    @Size(min = 2)
-    private String endCityName;
 }

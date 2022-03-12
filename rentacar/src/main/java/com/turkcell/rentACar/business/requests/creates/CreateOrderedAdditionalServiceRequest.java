@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class CreateOrderedAdditionalServiceRequest {
     @NotNull
-    private int rentalId;
+    private int carRentalId;
 
     @NotNull
     private int additionalServiceId;

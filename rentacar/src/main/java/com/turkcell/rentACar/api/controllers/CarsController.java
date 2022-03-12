@@ -15,10 +15,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cars")
-public class CarsController {
+public class CarsController 
+{
     private CarService carService;
 
-    public CarsController(CarService carService) {
+    public CarsController(CarService carService) 
+    {
         this.carService = carService;
     }
 
@@ -27,35 +29,44 @@ public class CarsController {
         return this.carService.getAll();
     }
     @GetMapping("/getById")
-    public DataResult<CarListDto> getById(@RequestParam int id){return this.carService.getById(id);}
+    public DataResult<CarListDto> getById(@RequestParam int id) throws BusinessException
+    {
+    	return this.carService.getById(id);
+    }
 
     @PostMapping("/add")
-    public Result add(@RequestBody CreateCarRequest createCarRequest) throws BusinessException {
+    public Result add(@RequestBody CreateCarRequest createCarRequest) throws BusinessException 
+    {
         return this.carService.add(createCarRequest);
     }
 
     @PutMapping("/update")
-    public Result update(@RequestBody UpdateCarRequest updateCarRequest) throws BusinessException{
+    public Result update(@RequestBody UpdateCarRequest updateCarRequest) throws BusinessException
+    {
         return this.carService.update(updateCarRequest);
     }
 
     @DeleteMapping("/delete")
-    public Result delete(@RequestBody DeleteCarRequest deleteCarRequest){
+    public Result delete(@RequestBody DeleteCarRequest deleteCarRequest) throws BusinessException
+    {
         return this.carService.delete(deleteCarRequest);
     }
 
     @GetMapping("/getByCarDailyPriceLessThanOrEqual")
-    public DataResult<List<CarListDto>> getByCarDailyPriceLessThanOrEqual(@RequestParam Double carDailyPrice){
+    public DataResult<List<CarListDto>> getByCarDailyPriceLessThanOrEqual(@RequestParam Double carDailyPrice)
+    {
         return this.carService.getByCarDailyPriceLessThanOrEqual(carDailyPrice);
     }
 
     @GetMapping("/getAllPaged")
-    public DataResult<List<CarListDto>> getAllPaged(@RequestParam int pageNo,int pageSize){
+    public DataResult<List<CarListDto>> getAllPaged(@RequestParam int pageNo,int pageSize)
+    {
         return this.carService.getAllPaged(pageNo,pageSize);
     }
 
     @GetMapping("/getAllSorted")
-    public DataResult<List<CarListDto>> getAllSorted(@RequestParam Sort.Direction direction){
+    public DataResult<List<CarListDto>> getAllSorted(@RequestParam Sort.Direction direction)
+    {
         return this.carService.getAllSorted(direction);
     }
     

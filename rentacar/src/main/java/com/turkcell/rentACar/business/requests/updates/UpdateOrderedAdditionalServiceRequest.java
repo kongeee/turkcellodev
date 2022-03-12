@@ -14,7 +14,7 @@ public class UpdateOrderedAdditionalServiceRequest {
     private int orderedAdditionalServiceId;
     
     @NotNull
-    private int rentalId;
+    private int carRentalId;
 
     @NotNull
     private int additionalServiceId;

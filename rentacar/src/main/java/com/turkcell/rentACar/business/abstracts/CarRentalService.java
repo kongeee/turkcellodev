@@ -1,6 +1,6 @@
 package com.turkcell.rentACar.business.abstracts;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.turkcell.rentACar.business.dtos.CarRentalDto;
@@ -11,15 +11,15 @@ import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalRequest;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
 import com.turkcell.rentACar.core.utilities.results.Result;
-import com.turkcell.rentACar.entities.concretes.CarRental;
 
-public interface CarRentalService {
-
+public interface CarRentalService 
+{
     DataResult<List<CarRentalDto>> getAll();
     Result add(CreateCarRentalRequest createCarRentalRequest)  throws BusinessException;
-    Result update(UpdateCarRentalRequest updateCarRentalRequest);
-    Result delete(DeleteCarRentalRequest deleteCarRentalRequest);
-    DataResult<List<CarRentalListDto>> getByCarId(int id);
-    DataResult<CarRental> getByCar_CarIdAndReturnDate(int carId,Date returnDate);
-    DataResult<Double> calculatePrice(CreateCarRentalRequest createCarRentalRequest);
+    Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException;
+    Result delete(DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException;
+    DataResult<List<CarRentalListDto>> getByCarId(int id) throws BusinessException;
+    DataResult<CarRentalDto> getById(int id);
+    DataResult<Boolean> IsAVehicleAvailableOnTheSpecifiedDate(int carId,LocalDate returnDate) throws BusinessException;
+    DataResult<Double> calculatePrice(CreateCarRentalRequest createCarRentalRequest) throws BusinessException ;
 }

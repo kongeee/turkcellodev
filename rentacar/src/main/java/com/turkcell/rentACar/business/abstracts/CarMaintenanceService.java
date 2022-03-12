@@ -17,8 +17,8 @@ import java.util.List;
 public interface CarMaintenanceService {
     DataResult<List<CarMaintenanceListDto>> getAll();
     Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest)  throws BusinessException;
-    Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest);
-    Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest);
-    DataResult<List<CarMaintenanceListDto>> getByCarId(int id);
+    Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest) throws BusinessException;
+    Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) throws BusinessException;
+    DataResult<List<CarMaintenanceListDto>> getByCarId(int id) throws BusinessException;
     DataResult<CarMaintenance> getByCar_CarIdAndReturnDate(int carId,Date returnDate);
 }

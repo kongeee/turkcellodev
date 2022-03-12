@@ -12,5 +12,5 @@ import java.util.List;
 public interface BrandDao extends JpaRepository<Brand,Integer> {
     Color getByBrandId(Integer id);
     List<Brand> getAllByBrandId(Integer id);
-    List<Brand> getAllByBrandName(String name);
+    boolean existsByBrandName(String brandName);
 }

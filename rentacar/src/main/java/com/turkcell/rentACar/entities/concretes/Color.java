@@ -14,14 +14,14 @@ import java.util.List;
 @Table(name = "colors")
 
 public class Color {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "color_id")
-    private int colorId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "color_id")
+	private int colorId;
 
-    @Column(name = "color_name")
-    private String colorName;
+	@Column(name = "color_name")
+	private String colorName;
 
-   @OneToMany(mappedBy = "color")
-    private List<Car> cars;
+	@OneToMany(mappedBy = "color")
+	private List<Car> cars;
 }

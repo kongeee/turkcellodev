@@ -13,20 +13,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/api/carMaintenances")
-public class CarMaintenancesController {
+public class CarMaintenancesController 
+{
     private CarMaintenanceService carMaintenanceService;
 
-    public CarMaintenancesController(CarMaintenanceService carMaintenanceService) {
+    public CarMaintenancesController(CarMaintenanceService carMaintenanceService) 
+    {
         this.carMaintenanceService = carMaintenanceService;
     }
+    
     @GetMapping("/getAll")
-    DataResult<List<CarMaintenanceListDto>> getAll(){return carMaintenanceService.getAll();}
+    DataResult<List<CarMaintenanceListDto>> getAll()
+    {
+    	return carMaintenanceService.getAll();
+    }
+    
     @PostMapping("/add")
-    Result add(@RequestBody CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException{return carMaintenanceService.add(createCarMaintenanceRequest);}
+    Result add(@RequestBody CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException
+    {
+    	return carMaintenanceService.add(createCarMaintenanceRequest);
+    }
+    
     @PutMapping("/update")
-    Result update(@RequestBody UpdateCarMaintenanceRequest updateCarMaintenanceRequest){return carMaintenanceService.update(updateCarMaintenanceRequest);}
+    Result update(@RequestBody UpdateCarMaintenanceRequest updateCarMaintenanceRequest) throws BusinessException
+    {
+    	return carMaintenanceService.update(updateCarMaintenanceRequest);
+    }
+    
     @DeleteMapping("/delete")
-    Result delete(@RequestBody DeleteCarMaintenanceRequest deleteCarMaintenanceRequest){return carMaintenanceService.delete(deleteCarMaintenanceRequest);}
+    Result delete(@RequestBody DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) throws BusinessException
+    {
+    	return carMaintenanceService.delete(deleteCarMaintenanceRequest);
+    }
     @GetMapping("/getByCarId")
-    DataResult<List<CarMaintenanceListDto>> getByCarId(@RequestParam int id){return carMaintenanceService.getByCarId(id);}
+    DataResult<List<CarMaintenanceListDto>> getByCarId(@RequestParam int id) throws BusinessException
+    {
+    	return carMaintenanceService.getByCarId(id);
+    }
 }
