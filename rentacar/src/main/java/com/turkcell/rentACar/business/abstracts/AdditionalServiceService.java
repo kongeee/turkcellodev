@@ -18,5 +18,6 @@ public interface AdditionalServiceService
     Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException;
     DataResult<List<AdditionalServiceListDto>> getAll();
     DataResult<AdditionalServiceDto> getById(int additionalServiceId) throws BusinessException;
-    DataResult<List<AdditionalServiceListDto>> getAdditionalServicesByIds(List<Integer> additionalServicesIds); 
+    DataResult<List<AdditionalServiceListDto>> getAdditionalServicesByIds(List<Integer> additionalServicesIds);
+    DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceListDtos);
 }

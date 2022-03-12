@@ -18,9 +18,10 @@ import com.turkcell.rentACar.business.dtos.AdditionalServiceListDto;
 import com.turkcell.rentACar.business.dtos.CarListDto;
 import com.turkcell.rentACar.business.dtos.CarRentalDto;
 import com.turkcell.rentACar.business.dtos.CarRentalListDto;
+import com.turkcell.rentACar.business.requests.creates.CreateCarRentalForCorporateCustomerRequest;
+import com.turkcell.rentACar.business.requests.creates.CreateCarRentalForIndividualCustomerRequest;
 import com.turkcell.rentACar.business.requests.creates.CreateCarRentalRequest;
 import com.turkcell.rentACar.business.requests.creates.CreateOrderedAdditionalServiceRequest;
-import com.turkcell.rentACar.business.requests.creates.CreeateCarRentalForIndividualCustomerRequest;
 import com.turkcell.rentACar.business.requests.deletes.DeleteCarRentalRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalRequest;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
@@ -66,7 +67,7 @@ public class CarRentalManager implements CarRentalService {
 				.collect(Collectors.toList());
 		return new SuccessDataResult<List<CarRentalDto>>(response, "Car Rental Listed Successfully");
 	}
-
+	/*
 	@Override
 	public Result add(CreateCarRentalRequest createCarRentalRequest) throws BusinessException 
 	{
@@ -89,34 +90,37 @@ public class CarRentalManager implements CarRentalService {
 
 		return new SuccessResult("Car Rental Added Successfully");
 	}
-
+	*/
 	@Override
 	public Result rentForIndividualCustomer(
-			CreeateCarRentalForIndividualCustomerRequest creeateCarRentalForIndividualCustomerRequest) {
+			CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException {
 		
-				checkIfCarExistsById(creeateCarRentalForIndividualCustomerRequest.getCarId());
-				checkIfCarMaintenance(creeateCarRentalForIndividualCustomerRequest.getCarId());
-				checkIfItCanBeRented(creeateCarRentalForIndividualCustomerRequest.getStartDate(), creeateCarRentalForIndividualCustomerRequest.getReturnDate(), creeateCarRentalForIndividualCustomerRequest.getCarId());
+				checkIfCarExistsById(createCarRentalForIndividualCustomerRequest.getCarId());
+				checkIfCarMaintenance(createCarRentalForIndividualCustomerRequest.getCarId());
+				checkIfItCanBeRented(createCarRentalForIndividualCustomerRequest.getStartDate(), createCarRentalForIndividualCustomerRequest.getReturnDate(), createCarRentalForIndividualCustomerRequest.getCarId());
 		
-				var price = calculatePrice();
+				var price = calculatePrice(createCarRentalForIndividualCustomerRequest.getCarId(), createCarRentalForIndividualCustomerRequest.getStartDate(), createCarRentalForIndividualCustomerRequest.getReturnDate(),
+				createCarRentalForIndividualCustomerRequest.getAdditionalServiceIds(),
+				createCarRentalForIndividualCustomerRequest.getStartCity(),
+				createCarRentalForIndividualCustomerRequest.getEndCity());
 		
-				CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalRequest, CarRental.class);
+				CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForIndividualCustomerRequest, CarRental.class);
 				carRental.setCarRentalId(0);
-				carRental.setPrice(price.getData());
+				carRental.setPrice(price);
 				carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 		
 				this.carRentalDao.save(carRental);
 		
-				carRental= this.carRentalDao.getByRecentlyAddedVehicleId(createCarRentalRequest.getCarId());
+				carRental= this.carRentalDao.getByRecentlyAddedVehicleId(createCarRentalForIndividualCustomerRequest.getCarId());
 		
-				insertAddtionalServices(createCarRentalRequest.getAddtionalServicesId(),carRental.getCarRentalId());
+				insertAddtionalServices(createCarRentalForIndividualCustomerRequest.getAdditionalServiceIds(),carRental.getCarRentalId());
 		
 				return new SuccessResult("Car Rental Added Successfully");
 	}
 
 	@Override
 	public Result rentForCorporateCustomer(
-			CreeateCarRentalForIndividualCustomerRequest creeateCarRentalForCorporateCustomerRequest) {
+		CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -171,7 +175,7 @@ public class CarRentalManager implements CarRentalService {
 		}
 		throw new BusinessException("The vehicle was rented on the specified date");
 	}
-
+	/*
 	@Override
 	public DataResult<Double> calculatePrice(CreateCarRentalRequest createCarRentalRequest) throws BusinessException 
 	{
@@ -186,11 +190,11 @@ public class CarRentalManager implements CarRentalService {
 
 		double price = days * car.getCarDailyPrice() + calculateExtraPriceByCityDistance(carRental);
 
-		price += calculateAdditionalServicePrice(days,additionalServices.getData());
+		price += additionalServiceService.(days,additionalServices.getData());
 
 		return new SuccessDataResult<Double>(price, "Total Price");
 	}
-	
+	*/
 
 	private double calculatePrice(int carId, LocalDate startDate, LocalDate returnDate, List<Integer> additionalServiceIds, String startCity, String endCity) throws BusinessException{
 		
@@ -198,12 +202,9 @@ public class CarRentalManager implements CarRentalService {
 
 		long days = findTheNumberOfDaysToRent(startDate, returnDate);
 
-		var additionalServices = this.additionalServiceService.getAdditionalServicesByIds(additionalServiceIds);
-
 		double price = days * car.getCarDailyPrice() + calculateExtraPriceByCityDistance(startCity, endCity);
 
-		price += calculateAdditionalServicePrice(days,additionalServices.getData());
-
+		price += additionalServiceService.calculateAdditionalServicePrice(days, additionalServiceIds).getData();
 		return price;
 	}
 
@@ -269,18 +270,6 @@ public class CarRentalManager implements CarRentalService {
 		}
 		return 750;
 	}
-
-	private double calculateAdditionalServicePrice(long days, List<AdditionalServiceListDto> additionalServiceListDtos) 
-	{
-		double price=0.0;
-		
-		for (var additionalService : additionalServiceListDtos) 
-		{
-			price += additionalService.getDailyPrice() * days;
-		}
-
-		return price;
-	}
 	
 	private void checkIfCarExistsById(int carId) throws BusinessException 
 	{
@@ -291,6 +280,8 @@ public class CarRentalManager implements CarRentalService {
 	{
 		this.carRentalDao.getById(carRentalId);
 	}
+
+	
 
 
 

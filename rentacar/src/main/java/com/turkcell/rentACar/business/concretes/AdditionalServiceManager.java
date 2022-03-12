@@ -98,6 +98,19 @@ public class AdditionalServiceManager implements AdditionalServiceService
 		return new SuccessDataResult<List<AdditionalServiceListDto>>(response,"Additional Services Ids Listed Successfully");
 	}
 
+    @Override
+    public DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds) 
+	{
+		double price=0.0;
+		var additionalServiceListDtos = getAdditionalServicesByIds(additionalServiceIds).getData();
+		for (var additionalService : additionalServiceListDtos) 
+		{
+			price += additionalService.getDailyPrice() * days;
+		}
+
+		return new SuccessDataResult<>(price);
+	}
+
 	private void checkIfExistAdditionalServiceByName(String additionalServiceName) throws BusinessException 
 	{
 		if(this.additionalServiceDao.existsByAdditionalServiceName(additionalServiceName)) 

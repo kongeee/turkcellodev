@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.turkcell.rentACar.business.abstracts.CarRentalService;
 import com.turkcell.rentACar.business.dtos.CarRentalDto;
 import com.turkcell.rentACar.business.dtos.CarRentalListDto;
+import com.turkcell.rentACar.business.requests.creates.CreateCarRentalForIndividualCustomerRequest;
 import com.turkcell.rentACar.business.requests.creates.CreateCarRentalRequest;
 import com.turkcell.rentACar.business.requests.deletes.DeleteCarRentalRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalRequest;
@@ -38,11 +39,11 @@ public class CarRentalController
 		return carRentalService.getAll();
 	}
 
-	@PostMapping("/add")
+	/*@PostMapping("/add")
 	Result add(@RequestBody CreateCarRentalRequest createCarRentalRequest)  throws BusinessException
 	{
 		return carRentalService.add(createCarRentalRequest);
-	}
+	}*/
 
 	@PutMapping("/update")
 	Result update(@RequestBody UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException
@@ -63,9 +64,9 @@ public class CarRentalController
 	}
 
 	@PostMapping("/calculatePrice")
-	DataResult<Double> calculatePrice(@RequestBody CreateCarRentalRequest createCarRentalRequest) throws BusinessException
+	Result calculatePrice(@RequestBody CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException
 	{
-		return carRentalService.calculatePrice(createCarRentalRequest);
+		return carRentalService.rentForIndividualCustomer(createCarRentalForIndividualCustomerRequest);
 	}
 
 }
