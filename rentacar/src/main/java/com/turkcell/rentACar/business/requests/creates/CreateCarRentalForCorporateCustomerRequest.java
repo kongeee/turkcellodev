@@ -1,6 +1,7 @@
 package com.turkcell.rentACar.business.requests.creates;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -19,6 +20,7 @@ public class CreateCarRentalForCorporateCustomerRequest {
     private int carId;
     
     private int corporateCustomerId;
+    private List<Integer> additionalServiceIds;
     private LocalDate startDate;
     private LocalDate returnDate;
     private String startCity;

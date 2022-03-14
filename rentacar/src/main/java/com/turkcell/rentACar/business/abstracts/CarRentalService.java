@@ -20,7 +20,7 @@ public interface CarRentalService
     DataResult<List<CarRentalDto>> getAll();
     /*Result add(CreateCarRentalRequest createCarRentalRequest)  throws BusinessException;*/
     Result rentForIndividualCustomer(CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException;
-    Result rentForCorporateCustomer(CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest);
+    Result rentForCorporateCustomer(CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) throws BusinessException;
     Result update(UpdateCarRentalRequest updateCarRentalRequest) throws BusinessException;
     Result delete(DeleteCarRentalRequest deleteCarRentalRequest) throws BusinessException;
     DataResult<List<CarRentalListDto>> getByCarId(int id) throws BusinessException;
