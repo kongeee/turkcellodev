@@ -25,6 +25,6 @@ public class CreateCarMaintenanceRequest {
     @NotNull
     @NotBlank
     @Positive
-    private LocalDate maintenanceDate;
+    private LocalDate returnDate;
 
 }

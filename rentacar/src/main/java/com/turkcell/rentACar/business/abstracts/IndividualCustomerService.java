@@ -11,11 +11,12 @@ import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
 import com.turkcell.rentACar.core.utilities.results.Result;
 
-public interface IndividualCustomerService {
-   
+public interface IndividualCustomerService 
+{   
     DataResult<List<IndividualCustomerListDto>> getAll();
     Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException;
     DataResult<IndividualCustomerDto> getById(int id) throws BusinessException;
 	Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException;
 	Result delete(DeleteIndividualCustomerRequest DeleteIndividualCustomerRequest) throws BusinessException;
+    Result checkIfExistByIndividualCustomerId(int individualCustomerId) throws BusinessException;
 }

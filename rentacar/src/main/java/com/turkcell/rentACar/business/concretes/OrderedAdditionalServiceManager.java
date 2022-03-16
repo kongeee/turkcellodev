@@ -120,4 +120,12 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	{
 		this.additionalServiceService.getById(additionalServiceId);
 	}
+
+	@Override
+	public Result deleteAllByCarRentelId(int carRentelId) throws BusinessException 
+	{
+		this.orderedOrderedAdditionalServiceDao.deleteAllByCarRental_CarRentalId(carRentelId);
+
+		return new SuccessResult();
+	}
 }

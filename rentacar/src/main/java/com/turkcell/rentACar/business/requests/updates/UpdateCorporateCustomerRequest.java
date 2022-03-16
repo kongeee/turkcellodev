@@ -5,14 +5,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class UpdateCorporateCustomerRequest {
-    @NotNull
+public class UpdateCorporateCustomerRequest 
+{
+    @Positive
     private int corporateCustomerId;
 
     @NotNull

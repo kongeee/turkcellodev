@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateInvoiceRequest {
+public class UpdateInvoiceRequest 
+{
     @Positive
     @NotNull
     private int invoiceId;
@@ -30,5 +31,4 @@ public class UpdateInvoiceRequest {
 
     @Positive
     private int customerId;
-
 }

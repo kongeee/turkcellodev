@@ -58,7 +58,7 @@ public class CarMaintenanceManager implements CarMaintenanceService
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) throws BusinessException 
 	{
 		checkIfCarExistsById(createCarMaintenanceRequest.getCarId());
-		checkIfItIsMaintainableByRented(createCarMaintenanceRequest.getCarId(), createCarMaintenanceRequest.getMaintenanceDate());
+		checkIfItIsMaintainableByRented(createCarMaintenanceRequest.getCarId(), createCarMaintenanceRequest.getReturnDate());
 		checkIfItIsMaintainableByMaintenance(createCarMaintenanceRequest.getCarId());
 
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(createCarMaintenanceRequest,
@@ -99,7 +99,7 @@ public class CarMaintenanceManager implements CarMaintenanceService
 	@Override
 	public DataResult<List<CarMaintenanceListDto>> getByCarId(int id) throws BusinessException 
 	{
-		checkIfExistByMaintenanceId(id);
+		checkIfCarExistsById(id);
 		
 		List<CarMaintenance> carMaintenanceList = carMaintenanceDao.getAllByCar_CarId(id);
 		List<CarMaintenanceListDto> response = carMaintenanceList.stream().map(
@@ -110,7 +110,7 @@ public class CarMaintenanceManager implements CarMaintenanceService
 	}
 
 	@Override
-	public DataResult<CarMaintenance> getByCar_CarIdAndReturnDate(int carId, Date returnDate) 
+	public DataResult<CarMaintenance> getByCarIdAndReturnDate(int carId, Date returnDate) 
 	{
 		return new SuccessDataResult<CarMaintenance>(
 				this.carMaintenanceDao.getByCar_CarIdAndReturnDate(carId, returnDate));
@@ -118,7 +118,7 @@ public class CarMaintenanceManager implements CarMaintenanceService
 
 	private void checkIfItIsMaintainableByRented(int carId, LocalDate localDate) throws BusinessException 
 	{
-		this.carRentalService.IsAVehicleAvailableOnTheSpecifiedDate(carId, localDate);
+		this.carRentalService.IsACarAvailableOnTheSpecifiedDate(carId, localDate);
 	}
 
 	private void checkIfItIsMaintainableByMaintenance(int carId) throws BusinessException 
@@ -142,6 +142,6 @@ public class CarMaintenanceManager implements CarMaintenanceService
 	
 	private void checkIfCarExistsById(int carId) throws BusinessException 
 	{
-		this.carService.getById(carId);
+		carService.checkIfExistByCarId(carId);
 	}
 }

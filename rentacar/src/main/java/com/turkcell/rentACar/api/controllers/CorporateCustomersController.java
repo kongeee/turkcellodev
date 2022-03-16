@@ -23,36 +23,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/corporate_customers")
-public class CorporateCustomersController {
-
+public class CorporateCustomersController 
+{
     private CorporateCustomerService corporateCustomerService;
 
-	public CorporateCustomersController(CorporateCustomerService corporateCustomerService) {
+	public CorporateCustomersController(CorporateCustomerService corporateCustomerService)
+    {
 		this.corporateCustomerService = corporateCustomerService;
 	}
 
     @PostMapping("/add")
-	public Result add(@RequestBody CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException {
+	public Result add(@RequestBody CreateCorporateCustomerRequest createCorporateCustomerRequest) throws BusinessException 
+    {
 		return this.corporateCustomerService.add(createCorporateCustomerRequest);
 	}
     
 	@GetMapping("/getAll")
-	DataResult<List<CorporateCustomerListDto>> getAll() {
+	DataResult<List<CorporateCustomerListDto>> getAll() 
+    {
 		return this.corporateCustomerService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<CorporateCustomerDto> getById(@RequestParam int id) throws BusinessException {
+	public DataResult<CorporateCustomerDto> getById(@RequestParam int id) throws BusinessException 
+    {
 		return this.corporateCustomerService.getById(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException {
+	public Result update(@RequestBody UpdateCorporateCustomerRequest updateCorporateCustomerRequest) throws BusinessException 
+    {
 		return this.corporateCustomerService.update(updateCorporateCustomerRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException {
+	public Result delete(@RequestBody DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) throws BusinessException 
+    {
 		return this.corporateCustomerService.delete(deleteCorporateCustomerRequest);
 	}
 }

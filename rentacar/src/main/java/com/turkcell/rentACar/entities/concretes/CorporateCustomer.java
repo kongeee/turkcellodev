@@ -1,7 +1,5 @@
 package com.turkcell.rentACar.entities.concretes;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -18,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "corporate_customers")
 
-public class CorporateCustomer extends Customer {
-    
+public class CorporateCustomer extends Customer
+{    
     @Column(name = "corporate_customer_id", insertable = false , updatable = false)
 	private int corporateCustomerId;
 

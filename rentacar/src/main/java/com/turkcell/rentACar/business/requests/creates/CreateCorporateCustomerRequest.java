@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CreateCorporateCustomerRequest {
-    
+public class CreateCorporateCustomerRequest 
+{    
     @NotNull
 	private String companyName;
 

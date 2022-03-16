@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "individual_customers")
 
-public class IndividualCustomer extends Customer{
-    
+public class IndividualCustomer extends Customer
+{    
     @Column(name = "individual_customer_id", insertable = false , updatable = false)
 	private int individualCustomerId;
 
@@ -29,6 +29,4 @@ public class IndividualCustomer extends Customer{
 
     @Column(name = "national_identity")
 	private String nationalIdentity;
-    
-
 }

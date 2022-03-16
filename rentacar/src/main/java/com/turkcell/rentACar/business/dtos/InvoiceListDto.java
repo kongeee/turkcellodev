@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InvoiceListDto {
-    
+public class InvoiceListDto 
+{
 	private int invoiceId;
 	private LocalDate creationDate;
     private double totalPrice;
     private LocalDate startDate;
     private LocalDate returnDate;
-    private long rentedDays;
-    
+    private long rentedDays;   
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 
 
@@ -14,9 +15,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class UpdateIndividualCustomerRequest {
-
-    @NotNull
+public class UpdateIndividualCustomerRequest 
+{
+    @Positive
     private int individualCustomerId;
 
     @Email

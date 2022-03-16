@@ -11,7 +11,8 @@ import com.turkcell.rentACar.core.utilities.results.Result;
 
 import java.util.List;
 
-public interface InvoiceService {
+public interface InvoiceService 
+{
 	DataResult<List<InvoiceListDto>> getAll();
 	Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException;
 	DataResult<InvoiceDto> getById(int id) throws BusinessException;

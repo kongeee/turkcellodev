@@ -13,7 +13,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CreateIndividualCustomerRequest {
+public class CreateIndividualCustomerRequest 
+{
     @Email
     @NotNull
     private String email;
@@ -29,5 +30,4 @@ public class CreateIndividualCustomerRequest {
 
     @NotNull
 	private String nationalIdentity;
-
 }

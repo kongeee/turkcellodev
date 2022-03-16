@@ -23,36 +23,42 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/individual_customers")
-public class IndividualCustomersController {
-
+public class IndividualCustomersController 
+{
     private IndividualCustomerService individualCustomerService;
 
-	public IndividualCustomersController(IndividualCustomerService individualCustomerService) {
+	public IndividualCustomersController(IndividualCustomerService individualCustomerService) 
+	{
 		this.individualCustomerService = individualCustomerService;
 	}
 
     @PostMapping("/add")
-	public Result add(@RequestBody CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException {
+	public Result add(@RequestBody CreateIndividualCustomerRequest createIndividualCustomerRequest) throws BusinessException 
+	{
 		return this.individualCustomerService.add(createIndividualCustomerRequest);
 	}
     
 	@GetMapping("/getAll")
-	DataResult<List<IndividualCustomerListDto>> getAll() {
+	DataResult<List<IndividualCustomerListDto>> getAll() 
+	{
 		return this.individualCustomerService.getAll();
 	}
 
 	@GetMapping("/getById")
-	public DataResult<IndividualCustomerDto> getById(@RequestParam int id) throws BusinessException {
+	public DataResult<IndividualCustomerDto> getById(@RequestParam int id) throws BusinessException 
+	{
 		return this.individualCustomerService.getById(id);
 	}
 
 	@PutMapping("/update")
-	public Result update(@RequestBody UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException {
+	public Result update(@RequestBody UpdateIndividualCustomerRequest updateIndividualCustomerRequest) throws BusinessException 
+	{
 		return this.individualCustomerService.update(updateIndividualCustomerRequest);
 	}
 
 	@DeleteMapping("/delete")
-	public Result delete(@RequestBody DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException {
+	public Result delete(@RequestBody DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) throws BusinessException 
+	{
 		return this.individualCustomerService.delete(deleteIndividualCustomerRequest);
 	}
 }

@@ -2,6 +2,7 @@ package com.turkcell.rentACar.entities.concretes;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +22,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "invoices")
-public class Invoice {
+public class Invoice 
+{
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,12 +36,11 @@ public class Invoice {
     @Column(name = "total_price")
     private double totalPrice;
     
-    @OneToOne
-    @JoinColumn(name = "car_rental_id")
+    @OneToOne(orphanRemoval=true, cascade=CascadeType.REMOVE)
+    @JoinColumn(name = "car_rental_id" )
     private CarRental carRental;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
 }

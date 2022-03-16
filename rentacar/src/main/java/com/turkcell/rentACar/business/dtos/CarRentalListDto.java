@@ -2,6 +2,8 @@ package com.turkcell.rentACar.business.dtos;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +17,7 @@ public class CarRentalListDto {
     private LocalDate returnDate;
     private String startCityName;
     private String endCityName;
-    private int carId;
+    
+    @JsonProperty("carId")
+    private int car_CarId;
 }

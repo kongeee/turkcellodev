@@ -1,4 +1,4 @@
-package com.turkcell.rentACar.business.requests.creates;
+package com.turkcell.rentACar.business.requests.updates;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,30 +12,36 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateCarRentalForIndividualCustomerRequest 
-{
+@NoArgsConstructor
+public class UpdateCarRentalForCorporateCustomerRequest 
+{    
+    @NotNull
+    @Positive
+    private int carRentalId;
+    
     @NotNull
     @Positive
     private int carId;
     
+    @NotNull
     @Positive
-    private int individualCustomerId;
-
-    private List<Integer> additionalServiceIds;
+    private int corporateCustomerId;
 
     @NotNull
     private LocalDate startDate;
-    
+
     @NotNull
     private LocalDate returnDate;
-    
+
     @NotNull
     @NotBlank
     private int startCityId;
-    
+
     @NotNull
     @NotBlank
     private int endCityId;
+
+    private List<Integer> additionalServiceIds;
 }
+

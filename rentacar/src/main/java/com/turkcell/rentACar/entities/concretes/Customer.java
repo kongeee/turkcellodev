@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
-public class Customer extends User{
-
+public class Customer extends User
+{
 	@Column(name = "customer_id", insertable = false , updatable = false)
 	private int customerId;
 
