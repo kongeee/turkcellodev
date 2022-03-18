@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,9 +29,6 @@ public class UpdateCarRentalForIndividualCustomerRequest
     private int individualCustomerId;
 
     @NotNull
-    private List<Integer> additionalServiceIds;
-
-    @NotNull
     private LocalDate startDate;
     
     @NotNull
@@ -43,4 +41,10 @@ public class UpdateCarRentalForIndividualCustomerRequest
     @NotNull
     @NotBlank
     private int endCityId;
+
+    @PositiveOrZero
+    private double returnKilometer;
+
+    @NotNull
+    private List<Integer> additionalServiceIds;
 }

@@ -58,7 +58,8 @@ public class CarRentalManager implements CarRentalService {
 			CarService carService,
 			AdditionalServiceService additionalServiceService,
 			@Lazy OrderedAdditionalServiceService orderedAdditionalServiceService,
-			InvoiceService invoiceService, IndividualCustomerService individualCustomerService, 
+			InvoiceService invoiceService,
+			IndividualCustomerService individualCustomerService, 
 			CorporateCustomerService corporateCustomerService) 
 	{
 		this.modelMapperService = modelMapperService;
@@ -97,9 +98,13 @@ public class CarRentalManager implements CarRentalService {
 
 		var price =  calculatePriceForIndividaulCustomer(createCarRentalForIndividualCustomerRequest).getData();
 
+		double kilometerInformation = this.carService.getById(createCarRentalForIndividualCustomerRequest.getCarId()).getData().getKilometerInformation();
+
 		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForIndividualCustomerRequest, CarRental.class);
 		carRental.setCarRentalId(0);
 		carRental.setPrice(price);
+		carRental.setStartingKilometer(kilometerInformation);
+		carRental.setReturnKilometer(kilometerInformation);
 		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 
 		carRental = this.carRentalDao.save(carRental);
@@ -123,9 +128,13 @@ public class CarRentalManager implements CarRentalService {
 
 		var price = calculatePriceForCorporateCustomer(createCarRentalForCorporateCustomerRequest).getData();
 
+		double kilometerInformation = this.carService.getById(createCarRentalForCorporateCustomerRequest.getCarId()).getData().getKilometerInformation();
+
 		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForCorporateCustomerRequest, CarRental.class);
 		carRental.setCarRentalId(0);
 		carRental.setPrice(price);
+		carRental.setStartingKilometer(kilometerInformation);
+		carRental.setReturnKilometer(kilometerInformation);
 		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 
 		carRental=	this.carRentalDao.save(carRental);
@@ -152,12 +161,17 @@ public class CarRentalManager implements CarRentalService {
 		CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest = this.modelMapperService.forRequest().map(updateCarRentalForCorporateCustomerRequest, CreateCarRentalForIndividualCustomerRequest.class);
 		
 		var price = calculatePriceForIndividaulCustomer(createCarRentalForIndividualCustomerRequest).getData();
-		
+
+		double startingKilometer = this.carRentalDao.getById(updateCarRentalForCorporateCustomerRequest.getCarRentalId()).getStartingKilometer(); 
+
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalForCorporateCustomerRequest, CarRental.class);
 		carRental.setPrice(price);
+		carRental.setStartingKilometer(startingKilometer);
 		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 
-		this.carRentalDao.save(carRental);
+		carRental =	this.carRentalDao.save(carRental);
+
+		this.carService.updateKilometerInformation(carRental.getCar().getCarId(), carRental.getReturnKilometer());
 
 		updateInvoice(updateCarRentalForCorporateCustomerRequest.getCorporateCustomerId(), price, carRental);
 		
@@ -175,17 +189,22 @@ public class CarRentalManager implements CarRentalService {
 		checkIfIndividualCustomerExists(updateCarRentalForIndividualCustomerRequest.getIndividualCustomerId());
 
 		this.orderedAdditionalServiceService.deleteAllByCarRentelId(updateCarRentalForIndividualCustomerRequest.getCarRentalId());
-		insertAddtionalServices(updateCarRentalForIndividualCustomerRequest.getAdditionalServiceIds(),updateCarRentalForIndividualCustomerRequest.getCarRentalId());
+		
 
 		CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest = this.modelMapperService.forRequest().map(updateCarRentalForIndividualCustomerRequest, CreateCarRentalForIndividualCustomerRequest.class);
 		
 		var price = calculatePriceForIndividaulCustomer(createCarRentalForIndividualCustomerRequest).getData();
 		
+		double startingKilometer = this.carRentalDao.getById(updateCarRentalForIndividualCustomerRequest.getCarRentalId()).getStartingKilometer(); 
+
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalForIndividualCustomerRequest, CarRental.class);
 		carRental.setPrice(price);
+		carRental.setStartingKilometer(startingKilometer);
 		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 
-		this.carRentalDao.save(carRental);
+		carRental =	this.carRentalDao.save(carRental);
+
+		this.carService.updateKilometerInformation(carRental.getCar().getCarId(), carRental.getReturnKilometer());
 
 		updateInvoice(updateCarRentalForIndividualCustomerRequest.getIndividualCustomerId(), price, carRental);
 
@@ -196,7 +215,6 @@ public class CarRentalManager implements CarRentalService {
 	public Result deleteForIndividualCustomer(DeleteCarRentalForIndividualCustomerRequest deleteCarRentalForIndividualCustomerRequest) throws BusinessException 
 	{
 		checkIfCarRentalExistsById(deleteCarRentalForIndividualCustomerRequest.getCarRentalId());
-		
 		
 		this.carRentalDao.deleteById(deleteCarRentalForIndividualCustomerRequest.getCarRentalId());
 		
@@ -245,8 +263,6 @@ public class CarRentalManager implements CarRentalService {
 	@Override
 	public DataResult<Double> calculatePriceForCorporateCustomer(CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) throws BusinessException
 	{
-
-
 		var result = calculatePrice(createCarRentalForCorporateCustomerRequest.getCarId(), createCarRentalForCorporateCustomerRequest.getStartDate(), createCarRentalForCorporateCustomerRequest.getReturnDate(),
 		createCarRentalForCorporateCustomerRequest.getAdditionalServiceIds(),
 		createCarRentalForCorporateCustomerRequest.getStartCityId(),

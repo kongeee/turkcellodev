@@ -14,7 +14,8 @@ import com.turkcell.rentACar.entities.concretes.CarMaintenance;
 import java.util.Date;
 import java.util.List;
 
-public interface CarMaintenanceService {
+public interface CarMaintenanceService 
+{
     DataResult<List<CarMaintenanceListDto>> getAll();
     Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest)  throws BusinessException;
     Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest) throws BusinessException;

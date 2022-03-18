@@ -13,7 +13,6 @@ import com.turkcell.rentACar.entities.concretes.CarRental;
 @Repository
 public interface CarRentalDao extends JpaRepository<CarRental, Integer> 
 {
-	
 	boolean existsByCarRentalId(int carRenatalId);
 
 	List<CarRental> getAllByCar_CarId(Integer id);

@@ -46,7 +46,6 @@ public class CarManager implements CarService
 	@Override
 	public Result add(CreateCarRequest createCarRequest) throws BusinessException 
 	{
-
 		Car car = this.modelMapperService.forRequest().map(createCarRequest,Car.class);
 		this.carDao.save(car);
 		
@@ -116,7 +115,19 @@ public class CarManager implements CarService
 		
 		return new SuccessDataResult<List<CarListDto>>(response,"Cars Listed succesfully");
 	}
-	
+
+	@Override
+	public Result updateKilometerInformation(int carId, double kilometerInformation) throws BusinessException 
+	{
+		checkIfExistByCarId(carId);
+
+		Car car = this.carDao.getById(carId);
+		car.setKilometerInformation(kilometerInformation);
+		this.carDao.save(car);
+
+		return new SuccessResult();
+	}
+
 	@Override
 	public Result checkIfExistByCarId(int carId) throws BusinessException 
 	{

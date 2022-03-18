@@ -22,20 +22,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdditionalServiceManager implements AdditionalServiceService {
+public class AdditionalServiceManager implements AdditionalServiceService 
+{
     private AdditionalServiceDao additionalServiceDao;
     private ModelMapperService modelMapperService;
 
     @Autowired
-    public AdditionalServiceManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
-        
+    public AdditionalServiceManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) 
+    {
         this.additionalServiceDao = additionalServiceDao;
         this.modelMapperService = modelMapperService;
     }
 
     @Override
-    public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException {
-        
+    public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException 
+    {    
         checkIfExistAdditionalServiceByName(createAdditionalServiceRequest.getAdditionalServiceName());
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest,
@@ -47,8 +48,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
     }
 
     @Override
-    public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException {
-        
+    public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException 
+    {    
         checkIfExistByAdditionalServiceById(updateAdditionalServiceRequest.getAdditionalServiceId());
         checkIfExistAdditionalServiceByName(updateAdditionalServiceRequest.getAdditionalServiceName());
 
@@ -63,8 +64,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
     }
 
     @Override
-    public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException {
-       
+    public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException 
+    {   
         checkIfExistByAdditionalServiceById(deleteAdditionalServiceRequest.getOrderedAdditionalServiceId());
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(deleteAdditionalServiceRequest,
@@ -76,8 +77,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
     }
 
     @Override
-    public DataResult<List<AdditionalServiceListDto>> getAll() {
-        
+    public DataResult<List<AdditionalServiceListDto>> getAll() 
+    {    
         List<AdditionalService> result = this.additionalServiceDao.findAll();
         List<AdditionalServiceListDto> response = result.stream().map(additionalService -> this.modelMapperService
                 .forDto().map(additionalService, AdditionalServiceListDto.class)).collect(Collectors.toList());
@@ -87,8 +88,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
     }
 
     @Override
-    public DataResult<AdditionalServiceDto> getById(int additionalServiceId) throws BusinessException {
-        
+    public DataResult<AdditionalServiceDto> getById(int additionalServiceId) throws BusinessException 
+    {    
         checkIfExistByAdditionalServiceById(additionalServiceId);
 
         AdditionalService additionalService = additionalServiceDao.getById(additionalServiceId);
@@ -102,7 +103,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 
     @Override
     public DataResult<List<AdditionalServiceListDto>> getAdditionalServicesByIds(List<Integer> additionalServicesIds)
-            throws BusinessException {
+            throws BusinessException 
+    {
         var result = this.additionalServiceDao.getAdditionalServicesByIds(additionalServicesIds);
 
         checkIfRequestedAdditionalServicesAreAvaliable(additionalServicesIds, result);
@@ -116,8 +118,8 @@ public class AdditionalServiceManager implements AdditionalServiceService {
 
     @Override
     public DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds)
-            throws BusinessException {
-        
+            throws BusinessException 
+    {
         double price = 0.0;
         
         var additionalServiceListDtos = getAdditionalServicesByIds(additionalServiceIds).getData();
@@ -129,23 +131,23 @@ public class AdditionalServiceManager implements AdditionalServiceService {
         return new SuccessDataResult<>(price);
     }
 
-    private void checkIfExistAdditionalServiceByName(String additionalServiceName) throws BusinessException {
-        
+    private void checkIfExistAdditionalServiceByName(String additionalServiceName) throws BusinessException 
+    {    
         if (this.additionalServiceDao.existsByAdditionalServiceName(additionalServiceName)) {
             throw new BusinessException("This AdditionalService already exists");
         }
     }
 
-    private void checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException {
-        
+    private void checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException 
+    {    
         if (!this.additionalServiceDao.existsById(additionalServiceId)) {
             throw new BusinessException("AdditionalService not found");
         }
     }
 
     private void checkIfRequestedAdditionalServicesAreAvaliable(List<Integer> additionalServicesIds,
-            List<AdditionalService> result) throws BusinessException {
-
+            List<AdditionalService> result) throws BusinessException 
+    {
         if (additionalServicesIds.size() != result.size()) {
             throw new BusinessException("Additional services that are requested is not found");
         }

@@ -11,7 +11,8 @@ import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
 import com.turkcell.rentACar.core.utilities.results.Result;
 
-public interface OrderedAdditionalServiceService {
+public interface OrderedAdditionalServiceService 
+{
     Result add(CreateOrderedAdditionalServiceRequest createAdditionalServiceRequest) throws BusinessException;
     Result update(UpdateOrderedAdditionalServiceRequest updateAdditionalServiceRequest) throws BusinessException;
     Result delete(DeleteOrderedAdditionalServiceRequest deleteAdditionalServiceRequest) throws BusinessException;

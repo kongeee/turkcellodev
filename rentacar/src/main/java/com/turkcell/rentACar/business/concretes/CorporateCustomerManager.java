@@ -23,8 +23,8 @@ import com.turkcell.rentACar.entities.concretes.CorporateCustomer;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CorporateCustomerManager implements CorporateCustomerService{
-
+public class CorporateCustomerManager implements CorporateCustomerService
+{
     private CorporateCustomerDao corporateCustomerDao;
     private ModelMapperService modelMapperService;
     private UserService userService;

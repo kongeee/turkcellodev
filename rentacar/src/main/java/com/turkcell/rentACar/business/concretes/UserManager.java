@@ -11,8 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserManager implements UserService {
-
+public class UserManager implements UserService 
+{
     private UserDao userDao;
     
     public UserManager(UserDao userDao, ModelMapper modelMapper) {
@@ -36,5 +36,4 @@ public class UserManager implements UserService {
             throw new BusinessException("User is not found");
         }
     }
-    
 }

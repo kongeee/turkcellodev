@@ -15,10 +15,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.context.annotation.Lazy;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,6 +45,12 @@ public class CarRental
 	@JoinColumn(name = "end_city_id")
 	private City endCity;
 
+	@Column(name = "starting_kilometer")
+    private double startingKilometer;
+
+    @Column(name = "return_kilometer")
+    private double returnKilometer;
+
 	@Column(name = "price")
 	private double price;
 
@@ -59,9 +61,9 @@ public class CarRental
 	@JoinColumn(name = "car_id")
 	private Car car;
 
-	@OneToMany(mappedBy ="carRental" ,orphanRemoval=true, cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy ="carRental")
 	private List<OrderedAdditionalService> orderedAdditionalService;
 
-	@OneToOne(mappedBy = "carRental", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToOne(mappedBy = "carRental")
 	private Invoice invoice;
 }

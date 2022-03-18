@@ -12,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "cars")
-public class Car {
+public class Car 
+{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "car_id")
@@ -26,6 +27,9 @@ public class Car {
 
 	@Column(name = "car_description")
 	private String carDescription;
+
+	@Column(name = "kilometer_information")
+	private double kilometerInformation;
 
 	@ManyToOne
 	@JoinColumn(name = "brand_id")
