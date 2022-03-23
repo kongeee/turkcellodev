@@ -11,7 +11,8 @@ import javax.validation.constraints.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCarMaintenanceRequest {
+public class CreateCarMaintenanceRequest 
+{
     @Size(min=2,max=50)
     @NotNull
     @NotBlank

@@ -24,7 +24,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "invoices")
 public class Invoice 
 {
-
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "invoice_id")
@@ -43,4 +42,7 @@ public class Invoice
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToOne(mappedBy = "invoice")
+    private Payment payment;
 }

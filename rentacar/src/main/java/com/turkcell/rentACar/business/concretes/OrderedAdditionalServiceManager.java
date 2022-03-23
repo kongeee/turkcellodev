@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.turkcell.rentACar.business.abstracts.AdditionalServiceService;
 import com.turkcell.rentACar.business.abstracts.CarRentalService;
 import com.turkcell.rentACar.business.abstracts.OrderedAdditionalServiceService;
+import com.turkcell.rentACar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentACar.business.dtos.OrderedAdditionalServiceDto;
 import com.turkcell.rentACar.business.dtos.OrderedAdditionalServiceListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateOrderedAdditionalServiceRequest;
@@ -54,7 +55,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		orderedOrderedAdditionalService.setOrderedAdditionalServiceId(0);
 		this.orderedOrderedAdditionalServiceDao.save(orderedOrderedAdditionalService);
 
-		return new SuccessResult("Ordered Additional Service Added Successfully");
+		return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_ADDED);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		orderedOrderedAdditionalService = this.modelMapperService.forRequest().map(updateOrderedAdditionalServiceRequest,OrderedAdditionalService.class);
 		this.orderedOrderedAdditionalServiceDao.save(orderedOrderedAdditionalService);
 
-		return new SuccessResult("Ordered Additional Service Updated Successfully");
+		return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_UPDATED);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
 		OrderedAdditionalService orderedOrderedAdditionalService = this.modelMapperService.forRequest().map(deleteOrderedAdditionalServiceRequest,OrderedAdditionalService.class);
 		this.orderedOrderedAdditionalServiceDao.delete(orderedOrderedAdditionalService);
-		return new SuccessResult("Ordered Additional Service Deleted Successfully");
+		return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_DELETED);
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 
 		List<OrderedAdditionalServiceListDto> response = result.stream().map(orderedOrderedAdditionalService->this.modelMapperService.forDto().map(orderedOrderedAdditionalService,OrderedAdditionalServiceListDto.class)).collect(Collectors.toList());
 
-		return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response,"Ordered Additional Services Listed Successfully");
+		return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(response,BusinessMessages.ORDERED_ADDITIONAL_LISTED);
 	}
 
 	@Override
@@ -100,25 +101,25 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		OrderedAdditionalService orderedOrderedAdditionalService = orderedOrderedAdditionalServiceDao.getById(orderedOrderedAdditionalServiceId);
 		OrderedAdditionalServiceDto orderedOrderedAdditionalServiceDto = this.modelMapperService.forDto().map(orderedOrderedAdditionalService,OrderedAdditionalServiceDto.class);
 
-		return new SuccessDataResult<OrderedAdditionalServiceDto>(orderedOrderedAdditionalServiceDto,"Ordered Additional Service Listed Successfully");
+		return new SuccessDataResult<OrderedAdditionalServiceDto>(orderedOrderedAdditionalServiceDto,BusinessMessages.ORDERED_ADDITIONAL_GETTED);
 	}
 
 	private void checkIfExistByOrderedAdditionalServiceId(int orderedAdditionalServiceId) throws BusinessException 
 	{
 		if(!this.orderedOrderedAdditionalServiceDao.existsById(orderedAdditionalServiceId)) 
 		{
-			throw new BusinessException("Ordered Additional Service not found");
+			throw new BusinessException(BusinessMessages.ORDERED_ADDITIONAL_NOT_FOUND);
 		}
 	}
 	
 	private void checkIfCarRentalExistsById(int carRentalId) throws BusinessException 
 	{
-		this.carRentalService.getById(carRentalId);
+		this.carRentalService.checkIfCarRentalExistsById(carRentalId);
 	}
 	
 	private void checkIfCarAdditionalServiceExistsById(int additionalServiceId) throws BusinessException 
 	{
-		this.additionalServiceService.getById(additionalServiceId);
+		this.additionalServiceService.checkIfExistByAdditionalServiceById(additionalServiceId);
 	}
 
 	@Override

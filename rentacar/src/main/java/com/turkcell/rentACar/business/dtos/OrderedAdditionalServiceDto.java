@@ -1,6 +1,8 @@
 package com.turkcell.rentACar.business.dtos;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +10,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderedAdditionalServiceDto {
+public class OrderedAdditionalServiceDto 
+{
     private int orderedAdditionalServiceId;
     private String additionalServiceName;
-    private int carId;
+
+    @JsonProperty(value = "carRentalId")
+    private int carRental_CarRentalId;
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateInvoiceRequest 
-{    
+{   
     @NotNull
 	private LocalDate creationDate;
 
@@ -27,5 +27,5 @@ public class CreateInvoiceRequest
     private int carRentalId;
 
     @Positive
-    private int customerId;   
+    private int customerId;
 }

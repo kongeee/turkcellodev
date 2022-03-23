@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateAdditionalServiceRequest {
+public class UpdateAdditionalServiceRequest 
+{
     @NotNull
     private int additionalServiceId;
 
@@ -21,14 +22,5 @@ public class UpdateAdditionalServiceRequest {
 
     @NotNull
     @Min(0)
-    private double dailyPrice;
-
-    @NotNull
-    @Size(min = 2)
-    private String startCityName;
-    
-    @NotNull
-    @Size(min = 2)
-    private String endCityName;
-    
+    private double dailyPrice;    
 }

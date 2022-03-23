@@ -11,8 +11,8 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateAdditionalServiceRequest {
-    
+public class CreateAdditionalServiceRequest 
+{    
     @NotNull
     @Size(min = 2, max = 100)
     private String additionalServiceName;

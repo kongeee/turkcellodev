@@ -37,6 +37,4 @@ public class CreateCarRentalForCorporateCustomerRequest
     @NotNull
     @NotBlank
     private int endCityId;
-
-    private List<Integer> additionalServiceIds;
 }

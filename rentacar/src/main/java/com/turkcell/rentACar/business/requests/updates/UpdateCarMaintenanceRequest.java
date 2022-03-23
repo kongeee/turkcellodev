@@ -10,7 +10,10 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateCarMaintenanceRequest {
+public class UpdateCarMaintenanceRequest 
+{
+    @Positive
+    private int maintenanceId;
 
     @Size(min=2,max=50)
     @NotNull

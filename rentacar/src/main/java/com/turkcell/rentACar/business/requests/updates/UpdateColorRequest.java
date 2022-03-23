@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class UpdateColorRequest {
-
+public class UpdateColorRequest 
+{
     @NotBlank
     @NotNull
     @PositiveOrZero

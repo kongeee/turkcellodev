@@ -69,5 +69,17 @@ public class CarsController
     {
         return this.carService.getAllSorted(direction);
     }
+
+    @PostMapping("/checkIfExistByCarId")
+    public Result checkIfExistByCarId(int carId) throws BusinessException
+    {
+        return this.carService.checkIfExistByCarId(carId);
+    }
+
+    @PostMapping("/updateKilometerInformation")
+    public Result updateKilometerInformation(int carId,double kilometerInformation) throws BusinessException
+    {
+        return this.carService.updateKilometerInformation(carId, kilometerInformation);
+    }
     
 }

@@ -9,7 +9,8 @@ import javax.validation.constraints.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateCarRequest {
+public class UpdateCarRequest 
+{
     @NotNull
     @NotBlank
     @Positive

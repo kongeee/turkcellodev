@@ -1,6 +1,7 @@
 package com.turkcell.rentACar.business.concretes;
 
 import com.turkcell.rentACar.business.abstracts.InvoiceService;
+import com.turkcell.rentACar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentACar.business.dtos.InvoiceDto;
 import com.turkcell.rentACar.business.dtos.InvoiceListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateInvoiceRequest;
@@ -38,7 +39,7 @@ public class InvoiceManager implements InvoiceService
 				.map(invoice -> this.modelMapperService.forDto().map(invoice, InvoiceListDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<InvoiceListDto>>(response, "Invoices Listed Successfully");
+		return new SuccessDataResult<List<InvoiceListDto>>(response, BusinessMessages.INVOICE_LISTED);
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class InvoiceManager implements InvoiceService
 		invoice.setInvoiceId(0);
 		this.invoiceDao.save(invoice);
 
-		return new SuccessResult("Invoice Added Successfully");
+		return new SuccessResult(BusinessMessages.INVOICE_ADDED);
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public class InvoiceManager implements InvoiceService
 		Invoice invoice = invoiceDao.getById(id);
 		InvoiceDto invoiceDto = this.modelMapperService.forDto().map(invoice, InvoiceDto.class);
 
-		return new SuccessDataResult<InvoiceDto>(invoiceDto, "Invoice Listed Successfully");
+		return new SuccessDataResult<InvoiceDto>(invoiceDto, BusinessMessages.INVOICE_GETTED);
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class InvoiceManager implements InvoiceService
 
 		this.invoiceDao.save(invoiceUpdate);
 
-		return new SuccessResult("Invoice Updated Succesfully");
+		return new SuccessResult(BusinessMessages.INVOICE_UPDATED);
 	}
 
 	@Override
@@ -85,13 +86,17 @@ public class InvoiceManager implements InvoiceService
 		Invoice invoice = this.modelMapperService.forRequest().map(deleteInvoiceRequest, Invoice.class);
 		this.invoiceDao.delete(invoice);
 
-		return new SuccessResult("Invoice Deleted Succesfully");
+		return new SuccessResult(BusinessMessages.INVOICE_DELETED);
 	}
 
-	private void checkIfExistByInvoiceId(int invoiceId) throws BusinessException 
+	@Override
+	public Result checkIfExistByInvoiceId(int invoiceId) throws BusinessException 
     {
-		if (!this.invoiceDao.existsById(invoiceId)) {
-			throw new BusinessException("Invoice not found");
+		if (!this.invoiceDao.existsById(invoiceId)) 
+		{
+			throw new BusinessException(BusinessMessages.INVOICE_NOT_FOUND);
 		}
+
+		return new SuccessResult();
 	}
 }

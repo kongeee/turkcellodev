@@ -20,4 +20,6 @@ public interface AdditionalServiceService
     DataResult<AdditionalServiceDto> getById(int additionalServiceId) throws BusinessException;
     DataResult<List<AdditionalServiceListDto>> getAdditionalServicesByIds(List<Integer> additionalServicesIds) throws BusinessException;
     DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds) throws BusinessException;
+
+    Result checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException;
 }

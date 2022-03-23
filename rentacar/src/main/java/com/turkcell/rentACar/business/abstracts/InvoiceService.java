@@ -18,4 +18,6 @@ public interface InvoiceService
 	DataResult<InvoiceDto> getById(int id) throws BusinessException;
 	Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException;
 	Result delete(DeleteInvoiceRequest DeleteInvoiceRequest) throws BusinessException;
+
+	Result checkIfExistByInvoiceId(int invoiceId) throws BusinessException;
 }

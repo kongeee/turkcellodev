@@ -30,7 +30,9 @@ public interface CarRentalService
     Result deleteForIndividualCustomer(DeleteCarRentalForIndividualCustomerRequest deleteCarRentalForIndividualCustomerRequest) throws BusinessException;
     Result deleteForCorporateCustomer(DeleteCarRentalForCorporateCustomerRequest deleteCarRentalForCorporateCustomerRequest) throws BusinessException;
     
-    DataResult<Boolean> IsACarAvailableOnTheSpecifiedDate(int carId,LocalDate returnDate) throws BusinessException;
+    Result IsACarAvailableOnTheSpecifiedDate(int carId,LocalDate returnDate) throws BusinessException;
     DataResult<Double> calculatePriceForIndividaulCustomer(CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException;
     DataResult<Double> calculatePriceForCorporateCustomer(CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) throws BusinessException;
+
+    Result checkIfCarRentalExistsById(int carRentalId) throws BusinessException;
 }

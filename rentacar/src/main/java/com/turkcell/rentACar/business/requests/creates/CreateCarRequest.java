@@ -11,8 +11,8 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class CreateCarRequest {
-
+public class CreateCarRequest 
+{
     @NotBlank
     @NotNull
     @Min(50)

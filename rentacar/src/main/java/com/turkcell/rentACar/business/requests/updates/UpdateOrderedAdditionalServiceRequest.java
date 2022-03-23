@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateOrderedAdditionalServiceRequest {
+public class UpdateOrderedAdditionalServiceRequest 
+{
     @NotNull
     private int orderedAdditionalServiceId;
     
@@ -17,6 +18,5 @@ public class UpdateOrderedAdditionalServiceRequest {
     private int carRentalId;
 
     @NotNull
-    private int additionalServiceId;
-    
+    private int additionalServiceId;    
 }

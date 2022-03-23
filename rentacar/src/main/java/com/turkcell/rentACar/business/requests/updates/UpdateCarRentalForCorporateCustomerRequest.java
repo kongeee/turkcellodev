@@ -16,11 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCarRentalForCorporateCustomerRequest 
-{    
-    @NotNull
+{   
     @Positive
     private int carRentalId;
-    
+
     @NotNull
     @Positive
     private int carId;
@@ -45,7 +44,5 @@ public class UpdateCarRentalForCorporateCustomerRequest
 
     @PositiveOrZero
     private double returnKilometer;
-
-    private List<Integer> additionalServiceIds;
 }
 

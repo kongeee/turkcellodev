@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateColorRequest {
+public class CreateColorRequest 
+{
     @NotNull
     @NotBlank
     @Size(min=2,max=15)

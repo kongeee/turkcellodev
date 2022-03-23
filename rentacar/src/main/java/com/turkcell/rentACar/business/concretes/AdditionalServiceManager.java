@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.turkcell.rentACar.business.abstracts.AdditionalServiceService;
+import com.turkcell.rentACar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentACar.business.dtos.AdditionalServiceDto;
 import com.turkcell.rentACar.business.dtos.AdditionalServiceListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateAdditionalServiceRequest;
@@ -44,7 +45,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
 
         this.additionalServiceDao.save(additionalService);
 
-        return new SuccessResult("Additional Service Added Successfully");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_ADDED);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
 
         this.additionalServiceDao.save(additionalService);
 
-        return new SuccessResult("Additional Service Updated Successfully");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_UPDATED);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
 
         this.additionalServiceDao.delete(additionalService);
 
-        return new SuccessResult("Additional Service Deleted Successfully");
+        return new SuccessResult(BusinessMessages.ADDITIONAL_SERVICE_DELETED);
     }
 
     @Override
@@ -83,8 +84,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
         List<AdditionalServiceListDto> response = result.stream().map(additionalService -> this.modelMapperService
                 .forDto().map(additionalService, AdditionalServiceListDto.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<AdditionalServiceListDto>>(response,
-                "Additional Services Listed Successfully");
+        return new SuccessDataResult<List<AdditionalServiceListDto>>(response, BusinessMessages.ADDITIONAL_SERVICE_LISTED);
     }
 
     @Override
@@ -97,8 +97,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
         AdditionalServiceDto additionalServiceDto = this.modelMapperService.forDto().map(additionalService,
                 AdditionalServiceDto.class);
 
-        return new SuccessDataResult<AdditionalServiceDto>(additionalServiceDto,
-                "Additional Service Listed Successfully");
+        return new SuccessDataResult<AdditionalServiceDto>(additionalServiceDto, BusinessMessages.ADDITIONAL_SERVICE_GETTED);
     }
 
     @Override
@@ -112,8 +111,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
         List<AdditionalServiceListDto> response = result.stream().map(additionalService -> this.modelMapperService
                 .forDto().map(additionalService, AdditionalServiceListDto.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<AdditionalServiceListDto>>(response,
-                "Additional Services Ids Listed Successfully");
+        return new SuccessDataResult<List<AdditionalServiceListDto>>(response, BusinessMessages.ADDITIONAL_SERVICE_LISTED);
     }
 
     @Override
@@ -131,17 +129,20 @@ public class AdditionalServiceManager implements AdditionalServiceService
         return new SuccessDataResult<>(price);
     }
 
+    @Override
+    public Result checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException 
+    {    
+        if (!this.additionalServiceDao.existsById(additionalServiceId)) {
+            throw new BusinessException(BusinessMessages.ADDITIONAL_SERVICE_NOT_FOUND);
+        }
+
+        return new SuccessResult();
+    }
+    
     private void checkIfExistAdditionalServiceByName(String additionalServiceName) throws BusinessException 
     {    
         if (this.additionalServiceDao.existsByAdditionalServiceName(additionalServiceName)) {
-            throw new BusinessException("This AdditionalService already exists");
-        }
-    }
-
-    private void checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException 
-    {    
-        if (!this.additionalServiceDao.existsById(additionalServiceId)) {
-            throw new BusinessException("AdditionalService not found");
+            throw new BusinessException(BusinessMessages.ADDITIONAL_SERVICE_ALREADY_EXISTS);
         }
     }
 
@@ -149,7 +150,7 @@ public class AdditionalServiceManager implements AdditionalServiceService
             List<AdditionalService> result) throws BusinessException 
     {
         if (additionalServicesIds.size() != result.size()) {
-            throw new BusinessException("Additional services that are requested is not found");
+            throw new BusinessException(BusinessMessages.ADDITIONAL_SERVICE_NOT_FOUND);
         }
     }
 }

@@ -44,7 +44,4 @@ public class UpdateCarRentalForIndividualCustomerRequest
 
     @PositiveOrZero
     private double returnKilometer;
-
-    @NotNull
-    private List<Integer> additionalServiceIds;
 }
