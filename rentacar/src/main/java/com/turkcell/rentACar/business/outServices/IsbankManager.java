@@ -1,4 +1,4 @@
-package com.turkcell.rentACar.core.utilities.bankServices;
+package com.turkcell.rentACar.business.outServices;
 
 public class IsbankManager 
 {

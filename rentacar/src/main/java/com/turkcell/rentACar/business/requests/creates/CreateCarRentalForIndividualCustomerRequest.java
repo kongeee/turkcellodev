@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateCarRentalForIndividualCustomerRequest 
 {
-    @NotNull
     @Positive
     private int carId;
     
@@ -28,11 +27,15 @@ public class CreateCarRentalForIndividualCustomerRequest
     @NotNull
     private LocalDate returnDate;
     
-    @NotNull
-    @NotBlank
+    @Positive
     private int startCityId;
     
-    @NotNull
-    @NotBlank
+    @Positive
     private int endCityId;
+
+    @Positive
+    private double startingKilometer;
+
+    @Positive
+    private double returnKilometer;
 }

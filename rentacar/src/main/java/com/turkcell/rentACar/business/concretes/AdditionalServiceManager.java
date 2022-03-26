@@ -3,6 +3,8 @@ package com.turkcell.rentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.turkcell.rentACar.api.models.Calculates.AdditionalService.CalculateAdditionalServiceForCorporateCustomerModel;
+import com.turkcell.rentACar.api.models.Calculates.AdditionalService.CalculateAdditionalServiceForIndividualCustomerModel;
 import com.turkcell.rentACar.business.abstracts.AdditionalServiceService;
 import com.turkcell.rentACar.business.constants.messages.BusinessMessages;
 import com.turkcell.rentACar.business.dtos.AdditionalServiceDto;
@@ -10,6 +12,7 @@ import com.turkcell.rentACar.business.dtos.AdditionalServiceListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateAdditionalServiceRequest;
 import com.turkcell.rentACar.business.requests.deletes.DeleteAdditionalServiceRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateAdditionalServiceRequest;
+import com.turkcell.rentACar.business.utilities.dateOperations;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
@@ -115,12 +118,33 @@ public class AdditionalServiceManager implements AdditionalServiceService
     }
 
     @Override
-    public DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds)
-            throws BusinessException 
+    public DataResult<Double> calculateAdditionalServicePriceForCorporateCustomer(CalculateAdditionalServiceForCorporateCustomerModel calculateAdditionalServiceForCorporateCustomerModel)
+            throws BusinessException
     {
         double price = 0.0;
+
+        long days= dateOperations.findTheNumberOfDaysToRent(calculateAdditionalServiceForCorporateCustomerModel.getStartDate(),
+            calculateAdditionalServiceForCorporateCustomerModel.getReturnDate());
+
+        var additionalServiceListDtos = getAdditionalServicesByIds(calculateAdditionalServiceForCorporateCustomerModel.getOrderedAdditionalServiceIds()).getData();
         
-        var additionalServiceListDtos = getAdditionalServicesByIds(additionalServiceIds).getData();
+        for (var additionalService : additionalServiceListDtos) {
+            price += additionalService.getDailyPrice() * days;
+        }
+
+        return new SuccessDataResult<>(price);
+    }
+
+    @Override
+    public DataResult<Double> calculateAdditionalServicePriceForIndividualCustomer(CalculateAdditionalServiceForIndividualCustomerModel calculateAdditionalServiceForIndividualCustomerModel)
+            throws BusinessException
+    {
+        double price = 0.0;
+
+        long days= dateOperations.findTheNumberOfDaysToRent(calculateAdditionalServiceForIndividualCustomerModel.getStartDate(),
+            calculateAdditionalServiceForIndividualCustomerModel.getReturnDate());
+
+        var additionalServiceListDtos = getAdditionalServicesByIds(calculateAdditionalServiceForIndividualCustomerModel.getOrderedAdditionalServiceIds()).getData();
         
         for (var additionalService : additionalServiceListDtos) {
             price += additionalService.getDailyPrice() * days;

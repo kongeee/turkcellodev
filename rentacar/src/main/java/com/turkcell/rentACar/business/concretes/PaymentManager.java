@@ -8,7 +8,6 @@ import com.turkcell.rentACar.business.abstracts.CustomerService;
 import com.turkcell.rentACar.business.abstracts.InvoiceService;
 import com.turkcell.rentACar.business.abstracts.PaymentService;
 import com.turkcell.rentACar.business.constants.messages.BusinessMessages;
-import com.turkcell.rentACar.business.dependencyResolvers.BankServiceModule;
 import com.turkcell.rentACar.business.dtos.PaymentDto;
 import com.turkcell.rentACar.business.dtos.PaymentListDto;
 import com.turkcell.rentACar.business.requests.creates.CreatePaymentRequest;
@@ -36,7 +35,7 @@ public class PaymentManager implements PaymentService
     private CustomerService customerService;
 
     @Autowired
-    public PaymentManager( ModelMapperService modelMapperService, BankServiceModule bankServiceModule,PaymentDao paymentDao, InvoiceService invoiceService, CustomerService customerService) 
+    public PaymentManager( ModelMapperService modelMapperService, PaymentDao paymentDao, InvoiceService invoiceService, CustomerService customerService) 
     {
         this.paymentDao = paymentDao;
         this.modelMapperService = modelMapperService;

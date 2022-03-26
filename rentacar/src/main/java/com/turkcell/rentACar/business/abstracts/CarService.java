@@ -22,5 +22,5 @@ public interface CarService
     DataResult<List<CarListDto>> getAllPaged(int pageNo,int pageSize);
     DataResult<List<CarListDto>> getAllSorted(Sort.Direction direction);
     Result checkIfExistByCarId(int carId) throws BusinessException;
-    Result updateKilometerInformation(int carId,double kilometerInformation) throws BusinessException;
+    Result updateKilometerInformation(int carId,double newKilometer) throws BusinessException;
 }

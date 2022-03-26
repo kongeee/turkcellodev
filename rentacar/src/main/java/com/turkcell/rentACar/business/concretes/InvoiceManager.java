@@ -43,13 +43,16 @@ public class InvoiceManager implements InvoiceService
 	}
 
 	@Override
-	public Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException 
+	public DataResult<InvoiceDto> add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException 
     {
 		Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 		invoice.setInvoiceId(0);
-		this.invoiceDao.save(invoice);
+		
+		invoice = this.invoiceDao.save(invoice);
 
-		return new SuccessResult(BusinessMessages.INVOICE_ADDED);
+		InvoiceDto invoiceDto = this.modelMapperService.forDto().map(invoice, InvoiceDto.class);
+
+		return new SuccessDataResult<InvoiceDto>(invoiceDto, BusinessMessages.INVOICE_ADDED);
 	}
 
 	@Override

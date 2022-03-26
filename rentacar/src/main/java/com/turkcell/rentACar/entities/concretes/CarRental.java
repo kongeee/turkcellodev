@@ -54,7 +54,7 @@ public class CarRental
 	@Column(name = "rented_days")
 	private long rentedDays;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "car_id")
 	private Car car;
 

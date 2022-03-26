@@ -1,6 +1,7 @@
 package com.turkcell.rentACar.business.concretes;
 
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.turkcell.rentACar.business.abstracts.AdditionalServiceService;
@@ -28,7 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderedAdditionalServiceManager implements OrderedAdditionalServiceService 
 {
-
 	private OrderedAdditionalServiceDao orderedOrderedAdditionalServiceDao;
 	private ModelMapperService modelMapperService;
 	private CarRentalService carRentalService;
@@ -56,6 +56,19 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		this.orderedOrderedAdditionalServiceDao.save(orderedOrderedAdditionalService);
 
 		return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_ADDED);
+	}
+
+	@Override
+	public Result addRange(List<Integer> orderedAdditionalServiceIds, int carRentalId) throws BusinessException 
+	{
+		for(var item : orderedAdditionalServiceIds)
+		{
+			CreateOrderedAdditionalServiceRequest createOrderedAdditionalServiceRequest= new CreateOrderedAdditionalServiceRequest(carRentalId, item);
+
+			this.add(createOrderedAdditionalServiceRequest);
+		}
+
+		return new SuccessResult(BusinessMessages.ORDERED_ADDITIONAL_LIST_ADDED);
 	}
 
 	@Override
@@ -104,6 +117,26 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 		return new SuccessDataResult<OrderedAdditionalServiceDto>(orderedOrderedAdditionalServiceDto,BusinessMessages.ORDERED_ADDITIONAL_GETTED);
 	}
 
+	@Override
+	public Result deleteAllByCarRentelId(int carRentalId) throws BusinessException 
+	{
+		this.orderedOrderedAdditionalServiceDao.deleteAllByCarRental_CarRentalId(carRentalId);
+
+		return new SuccessResult();
+	}
+
+	@Override
+	public DataResult<List<OrderedAdditionalServiceListDto>> getAllByOrderedAdditionalService_CarRentalId(int carRentalId) throws BusinessException 
+	{
+		checkIfCarRentalExistsById(carRentalId);
+
+		List<OrderedAdditionalService> orderedAdditionalServices= this.orderedOrderedAdditionalServiceDao.getAllByOrderedAdditionalService_CarRentalId(carRentalId);
+
+		List<OrderedAdditionalServiceListDto> orderedAdditionalServiceListDtos =orderedAdditionalServices.stream().map(orderedAdditionalService-> this.modelMapperService.forDto().map(orderedAdditionalService, OrderedAdditionalServiceListDto.class)).collect(Collectors.toList());
+
+		return new SuccessDataResult<List<OrderedAdditionalServiceListDto>>(orderedAdditionalServiceListDtos);
+	}
+
 	private void checkIfExistByOrderedAdditionalServiceId(int orderedAdditionalServiceId) throws BusinessException 
 	{
 		if(!this.orderedOrderedAdditionalServiceDao.existsById(orderedAdditionalServiceId)) 
@@ -120,13 +153,5 @@ public class OrderedAdditionalServiceManager implements OrderedAdditionalService
 	private void checkIfCarAdditionalServiceExistsById(int additionalServiceId) throws BusinessException 
 	{
 		this.additionalServiceService.checkIfExistByAdditionalServiceById(additionalServiceId);
-	}
-
-	@Override
-	public Result deleteAllByCarRentelId(int carRentelId) throws BusinessException 
-	{
-		this.orderedOrderedAdditionalServiceDao.deleteAllByCarRental_CarRentalId(carRentelId);
-
-		return new SuccessResult();
 	}
 }

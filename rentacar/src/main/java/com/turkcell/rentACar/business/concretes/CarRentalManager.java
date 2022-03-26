@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.turkcell.rentACar.api.models.Calculates.CarRental.CalculateCarRentalForCorporateCustomerModel;
+import com.turkcell.rentACar.api.models.Calculates.CarRental.CalculateCarRentalForIndividualCustomerModel;
 import com.turkcell.rentACar.business.abstracts.CarMaintenanceService;
 import com.turkcell.rentACar.business.abstracts.CarRentalService;
 import com.turkcell.rentACar.business.abstracts.CarService;
@@ -24,6 +26,7 @@ import com.turkcell.rentACar.business.requests.deletes.DeleteCarRentalForCorpora
 import com.turkcell.rentACar.business.requests.deletes.DeleteCarRentalForIndividualCustomerRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalForCorporateCustomerRequest;
 import com.turkcell.rentACar.business.requests.updates.UpdateCarRentalForIndividualCustomerRequest;
+import com.turkcell.rentACar.business.utilities.dateOperations;
 import com.turkcell.rentACar.core.utilities.exceptions.BusinessException;
 import com.turkcell.rentACar.core.utilities.mapping.ModelMapperService;
 import com.turkcell.rentACar.core.utilities.results.DataResult;
@@ -73,7 +76,7 @@ public class CarRentalManager implements CarRentalService
 	}
 
 	@Override
-	public Result rentForIndividualCustomer(
+	public DataResult<CarRentalDto> rentForIndividualCustomer(
 			CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException 
 	{
 		checkIfCarExistsById(createCarRentalForIndividualCustomerRequest.getCarId());
@@ -83,22 +86,21 @@ public class CarRentalManager implements CarRentalService
 		checkIfStartDateBeforeToday(createCarRentalForIndividualCustomerRequest.getStartDate());
 		checkIfIndividualCustomerExists(createCarRentalForIndividualCustomerRequest.getIndividualCustomerId());
 
-		double kilometerInformation = this.carService.getById(createCarRentalForIndividualCustomerRequest.getCarId()).getData().getKilometerInformation();
 
 		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForIndividualCustomerRequest, CarRental.class);
 		carRental.setCarRentalId(0);
-		carRental.setStartingKilometer(kilometerInformation);
-		carRental.setReturnKilometer(kilometerInformation);
-		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+		carRental.setRentedDays(dateOperations.findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 		carRental.getCustomer().setUserId(createCarRentalForIndividualCustomerRequest.getIndividualCustomerId());
 
-		this.carRentalDao.save(carRental);
+		carRental = this.carRentalDao.save(carRental);
 
-		return new SuccessResult(BusinessMessages.CAR_RENTAL_ADDED);
+		CarRentalDto carRentalDto= this.modelMapperService.forDto().map(carRental, CarRentalDto.class);
+
+		return new SuccessDataResult<CarRentalDto>(carRentalDto,BusinessMessages.CAR_RENTAL_ADDED);
 	}
 
 	@Override
-	public Result rentForCorporateCustomer(
+	public DataResult<CarRentalDto> rentForCorporateCustomer(
 		CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) throws BusinessException 
 	{
 		checkIfCarExistsById(createCarRentalForCorporateCustomerRequest.getCarId());
@@ -108,18 +110,16 @@ public class CarRentalManager implements CarRentalService
 		checkIfStartDateBeforeToday(createCarRentalForCorporateCustomerRequest.getStartDate());
 		checkIfCorporateCustomerExists(createCarRentalForCorporateCustomerRequest.getCorporateCustomerId());
 
-		double kilometerInformation = this.carService.getById(createCarRentalForCorporateCustomerRequest.getCarId()).getData().getKilometerInformation();
-
 		CarRental carRental = this.modelMapperService.forRequest().map(createCarRentalForCorporateCustomerRequest, CarRental.class);
 		carRental.setCarRentalId(0);
-		carRental.setStartingKilometer(kilometerInformation);
-		carRental.setReturnKilometer(kilometerInformation);
-		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+		carRental.setRentedDays(dateOperations.findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 		carRental.getCustomer().setUserId(createCarRentalForCorporateCustomerRequest.getCorporateCustomerId());
 
-		this.carRentalDao.save(carRental);
+		carRental = this.carRentalDao.save(carRental);
 
-		return new SuccessResult(BusinessMessages.CAR_RENTAL_ADDED);
+		CarRentalDto carRentalDto= this.modelMapperService.forDto().map(carRental, CarRentalDto.class);
+
+		return new SuccessDataResult<CarRentalDto>(carRentalDto,BusinessMessages.CAR_RENTAL_ADDED);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class CarRentalManager implements CarRentalService
 
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalForCorporateCustomerRequest, CarRental.class);
 		carRental.setStartingKilometer(startingKilometer);
-		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+		carRental.setRentedDays(dateOperations.findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 		carRental.getCustomer().setUserId(updateCarRentalForCorporateCustomerRequest.getCorporateCustomerId());
 
 		carRental =	this.carRentalDao.save(carRental);
@@ -158,12 +158,82 @@ public class CarRentalManager implements CarRentalService
 
 		CarRental carRental = this.modelMapperService.forRequest().map(updateCarRentalForIndividualCustomerRequest, CarRental.class);
 		carRental.setStartingKilometer(startingKilometer);
-		carRental.setRentedDays(findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
+		carRental.setRentedDays(dateOperations.findTheNumberOfDaysToRent(carRental.getStartDate(), carRental.getReturnDate()));
 		carRental.getCustomer().setUserId(updateCarRentalForIndividualCustomerRequest.getIndividualCustomerId());
 
 		this.carRentalDao.save(carRental);
 
 		return new SuccessResult(BusinessMessages.CAR_RENTAL_UPDATED);
+	}
+
+	@Override
+	public Result updateReturnKilometerForCorporateCustomer(int carRentalId, int corporateCustormerId, double returnKilometer) throws BusinessException 
+	{
+		checkIfCorporateCustomerExists(corporateCustormerId);
+		checkIfCarRentalExistsById(carRentalId);
+
+		CarRental carRental = this.carRentalDao.getById(carRentalId);
+
+		checkIfTheCustomerIsTheSame(corporateCustormerId, carRental.getCustomer().getCustomerId());
+
+		carRental.setReturnKilometer(returnKilometer);
+
+		this.carRentalDao.save(carRental);
+
+		return new SuccessResult();
+	}
+
+	@Override
+	public Result updateReturnKilometerForIndividualCustomer(int carRentalId, int individualCustomerId, double returnKilometer) throws BusinessException 
+	{
+		checkIfIndividualCustomerExists(individualCustomerId);
+		checkIfCarRentalExistsById(carRentalId);
+		
+		CarRental carRental = this.carRentalDao.getById(carRentalId);
+
+		checkIfTheCustomerIsTheSame(individualCustomerId, carRental.getCustomer().getCustomerId());
+
+		carRental.setReturnKilometer(returnKilometer);
+
+		this.carRentalDao.save(carRental);
+
+		return new SuccessResult();
+	}
+
+	@Override
+	public Result updateReturnKilometerAndReturnDateForCorporateCustomer(int carRentalId, int corporateCustormerId, double returnKilometer, LocalDate returnDate) throws BusinessException 
+	{
+		checkIfIndividualCustomerExists(corporateCustormerId);
+		checkIfCarRentalExistsById(carRentalId);
+		
+		CarRental carRental = this.carRentalDao.getById(carRentalId);
+
+		checkIfTheCustomerIsTheSame(corporateCustormerId, carRental.getCustomer().getCustomerId());
+
+		carRental.setReturnKilometer(returnKilometer);
+		carRental.setReturnDate(returnDate);
+
+		this.carRentalDao.save(carRental);
+
+		return new SuccessResult();
+	}
+
+	@Override
+	public Result updateReturnKilometerAndReturnDateForIndividualCustomer(int carRentalId, int individualCustomerId, double returnKilometer, LocalDate returnDate) throws BusinessException 
+	{
+		checkIfIndividualCustomerExists(individualCustomerId);
+		checkIfCarRentalExistsById(carRentalId);
+		
+		CarRental carRental = this.carRentalDao.getById(carRentalId);
+
+		checkIfTheCustomerIsTheSame(individualCustomerId, carRental.getCustomer().getCustomerId());
+
+		carRental.setReturnKilometer(returnKilometer);
+		carRental.setReturnDate(returnDate);
+
+		this.carRentalDao.save(carRental);
+
+		return new SuccessResult();
 	}
 
 	@Override
@@ -214,21 +284,21 @@ public class CarRentalManager implements CarRentalService
 	}
 
 	@Override
-	public DataResult<Double> calculatePriceForCorporateCustomer(CreateCarRentalForCorporateCustomerRequest createCarRentalForCorporateCustomerRequest) throws BusinessException
+	public DataResult<Double> calculatePriceForCorporateCustomer(CalculateCarRentalForCorporateCustomerModel calculateCarRentalForCorporateCustomerModel) throws BusinessException
 	{
-		var result = calculatePrice(createCarRentalForCorporateCustomerRequest.getCarId(), createCarRentalForCorporateCustomerRequest.getStartDate(), createCarRentalForCorporateCustomerRequest.getReturnDate(),
-		createCarRentalForCorporateCustomerRequest.getStartCityId(),
-		createCarRentalForCorporateCustomerRequest.getEndCityId());
+		var result = calculatePrice(calculateCarRentalForCorporateCustomerModel.getCarId(), calculateCarRentalForCorporateCustomerModel.getStartDate(), calculateCarRentalForCorporateCustomerModel.getReturnDate(),
+		calculateCarRentalForCorporateCustomerModel.getStartCityId(),
+		calculateCarRentalForCorporateCustomerModel.getEndCityId());
 
 		return new SuccessDataResult<Double>(result);
 	}
 
 	@Override
-	public DataResult<Double> calculatePriceForIndividaulCustomer(CreateCarRentalForIndividualCustomerRequest createCarRentalForIndividualCustomerRequest) throws BusinessException
+	public DataResult<Double> calculatePriceForIndividualCustomer(CalculateCarRentalForIndividualCustomerModel calculateCarRentalForIndividualCustomerModel) throws BusinessException
 	{
-		var result = calculatePrice(createCarRentalForIndividualCustomerRequest.getCarId(), createCarRentalForIndividualCustomerRequest.getStartDate(), createCarRentalForIndividualCustomerRequest.getReturnDate(),
-		createCarRentalForIndividualCustomerRequest.getStartCityId(),
-		createCarRentalForIndividualCustomerRequest.getEndCityId());
+		var result = calculatePrice(calculateCarRentalForIndividualCustomerModel.getCarId(), calculateCarRentalForIndividualCustomerModel.getStartDate(), calculateCarRentalForIndividualCustomerModel.getReturnDate(),
+		calculateCarRentalForIndividualCustomerModel.getStartCityId(),
+		calculateCarRentalForIndividualCustomerModel.getEndCityId());
 
 		return new SuccessDataResult<Double>(result);
 	}
@@ -254,44 +324,32 @@ public class CarRentalManager implements CarRentalService
 		return new SuccessResult();
 	}
 
-	private double calculatePrice(int carId, LocalDate startDate, LocalDate returnDate, int startCityId, int endCityId) throws BusinessException{
-		
+	private double calculatePrice(int carId, LocalDate startDate, LocalDate returnDate, int startCityId, int endCityId) throws BusinessException
+	{	
 		CarListDto car = this.carService.getById(carId).getData();
 
-		long days = findTheNumberOfDaysToRent(startDate, returnDate);
+		long days = dateOperations.findTheNumberOfDaysToRent(startDate, returnDate);
 
 		double price = days * car.getCarDailyPrice() + calculateExtraPriceByCityDistance(startCityId, endCityId);
 		return price;
 	}
 
-	private boolean checkIfItCanBeRented(LocalDate startDate, LocalDate returnDate, int carId) throws BusinessException 
+	private void checkIfItCanBeRented(LocalDate startDate, LocalDate returnDate, int carId) throws BusinessException 
 	{
-		var result = this.carRentalDao.getRentalInformationOfTheCarOnTheSpecifiedDate(
-			startDate, returnDate, carId);
+		var result = this.carRentalDao.getRentalInformationOfTheCarOnTheSpecifiedDate(startDate, returnDate, carId);
 		if (result.size() > 0) 
 		{
 			throw new BusinessException(BusinessMessages.CAR_RENTAL_ALREADY_EXISTS_ON_SPECIFIC_DATE);
 		}
-		return true;
 	}
 
-	private boolean checkIfItCanBeRented(LocalDate startDate, LocalDate returnDate, int carId,int carRentalId) throws BusinessException 
+	private void checkIfItCanBeRented(LocalDate startDate, LocalDate returnDate, int carId,int carRentalId) throws BusinessException 
 	{
-		var result = this.carRentalDao.getRentalInformationOfTheCarOnTheSpecifiedDate(
-			startDate, returnDate, carId, carRentalId);
+		var result = this.carRentalDao.getRentalInformationOfTheCarOnTheSpecifiedDate(startDate, returnDate, carId, carRentalId);
 		if (result.size() > 0) 
 		{
 			throw new BusinessException(BusinessMessages.CAR_RENTAL_ALREADY_EXISTS_ON_SPECIFIC_DATE);
 		}
-		return true;
-	}
-
-	private long findTheNumberOfDaysToRent(LocalDate startDate, LocalDate returnDate)
-	{
-		long days = ChronoUnit.DAYS.between(startDate, returnDate);
-		
-		return (days==0) ? 1 : days;
-		
 	}
 
 	private void checkIfCarMaintenance(int carId) throws BusinessException 
@@ -313,8 +371,8 @@ public class CarRentalManager implements CarRentalService
 		this.carService.checkIfExistByCarId(carId);
 	}
 
-	private void checkIfStartDateBeforeToday(LocalDate startDate) throws BusinessException{
-		
+	private void checkIfStartDateBeforeToday(LocalDate startDate) throws BusinessException
+	{	
 		LocalDate now = LocalDate.now();
 
 		if(startDate.isBefore(now))
@@ -323,19 +381,29 @@ public class CarRentalManager implements CarRentalService
 		}
 	}
 
-	private void checkIfReturnDateAfterStartDate(LocalDate startDate, LocalDate returnDate) throws BusinessException{
-		
+	private void checkIfReturnDateAfterStartDate(LocalDate startDate, LocalDate returnDate) throws BusinessException
+	{	
 		if(startDate.isAfter(returnDate))
 		{
 			throw new BusinessException(BusinessMessages.START_DATE_MUST_NOT_BE_BEFORE_RETURN_DATE);
 		}
 	}
 
-	private void checkIfCorporateCustomerExists(int corporateCustomerId) throws BusinessException{
+	private void checkIfCorporateCustomerExists(int corporateCustomerId) throws BusinessException
+	{
 		this.corporateCustomerService.checkIfExistByCorporateCustomerId(corporateCustomerId);
 	}
 
-	private void checkIfIndividualCustomerExists(int individualCustomerId) throws BusinessException{
+	private void checkIfIndividualCustomerExists(int individualCustomerId) throws BusinessException
+	{
 		this.individualCustomerService.checkIfExistByIndividualCustomerId(individualCustomerId);
+	}
+
+	private void checkIfTheCustomerIsTheSame(int customerId1, int customerId2) throws BusinessException
+	{
+		if(customerId1!=customerId2)
+		{
+			throw new BusinessException("message");
+		}
 	}
 }

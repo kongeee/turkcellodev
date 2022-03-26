@@ -1,6 +1,6 @@
 package com.turkcell.rentACar.business.constants.messages;
 
-public interface SpecifikErrorMessages 
+public interface SpecificErrorMessages 
 {
     public static final String START_DATE_MUST_NOT_BE_BEFORE_TODAY = "Start Date Must Be Today Or A Date After Today";
 

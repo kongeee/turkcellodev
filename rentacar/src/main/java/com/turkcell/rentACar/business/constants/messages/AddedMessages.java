@@ -23,6 +23,7 @@ public interface AddedMessages
     public static final String INVOICE_ADDED = "Invoice Added Succesfully";
 
     public static final String ORDERED_ADDITIONAL_ADDED = "Ordered Additional Added Succesfully";
+    public static final String ORDERED_ADDITIONAL_LIST_ADDED = "Ordered Additional List Added Succesfully";
 
     public static final String PAYMENT_ADDED = "Payment Added Succesfully";
 }

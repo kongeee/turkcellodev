@@ -37,4 +37,10 @@ public class CreateCarRentalForCorporateCustomerRequest
     @NotNull
     @NotBlank
     private int endCityId;
+
+    @Positive
+    private double startingKilometer;
+
+    @Positive
+    private double returnKilometer;
 }

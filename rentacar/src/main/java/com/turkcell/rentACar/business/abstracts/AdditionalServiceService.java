@@ -2,6 +2,8 @@ package com.turkcell.rentACar.business.abstracts;
 
 import java.util.List;
 
+import com.turkcell.rentACar.api.models.Calculates.AdditionalService.CalculateAdditionalServiceForCorporateCustomerModel;
+import com.turkcell.rentACar.api.models.Calculates.AdditionalService.CalculateAdditionalServiceForIndividualCustomerModel;
 import com.turkcell.rentACar.business.dtos.AdditionalServiceDto;
 import com.turkcell.rentACar.business.dtos.AdditionalServiceListDto;
 import com.turkcell.rentACar.business.requests.creates.CreateAdditionalServiceRequest;
@@ -19,7 +21,8 @@ public interface AdditionalServiceService
     DataResult<List<AdditionalServiceListDto>> getAll();
     DataResult<AdditionalServiceDto> getById(int additionalServiceId) throws BusinessException;
     DataResult<List<AdditionalServiceListDto>> getAdditionalServicesByIds(List<Integer> additionalServicesIds) throws BusinessException;
-    DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds) throws BusinessException;
+    DataResult<Double> calculateAdditionalServicePriceForCorporateCustomer(CalculateAdditionalServiceForCorporateCustomerModel calculateAdditionalServiceForCorporateCustomerModel) throws BusinessException;
+    DataResult<Double> calculateAdditionalServicePriceForIndividualCustomer(CalculateAdditionalServiceForIndividualCustomerModel calculateAdditionalServiceForIndividualCustomerModel) throws BusinessException;
 
     Result checkIfExistByAdditionalServiceById(int additionalServiceId) throws BusinessException;
 }

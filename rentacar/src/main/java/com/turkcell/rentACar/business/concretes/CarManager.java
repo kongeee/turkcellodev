@@ -119,12 +119,12 @@ public class CarManager implements CarService
 	}
 
 	@Override
-	public Result updateKilometerInformation(int carId, double kilometerInformation) throws BusinessException 
+	public Result updateKilometerInformation(int carId, double newKilometer) throws BusinessException 
 	{
 		checkIfExistByCarId(carId);
 
 		Car car = this.carDao.getById(carId);
-		car.setKilometerInformation(kilometerInformation);
+		car.setKilometerInformation(newKilometer);
 		this.carDao.save(car);
 
 		return new SuccessResult(BusinessMessages.CAR_UPDATED);

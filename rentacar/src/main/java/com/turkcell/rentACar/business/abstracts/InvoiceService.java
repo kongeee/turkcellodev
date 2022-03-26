@@ -14,7 +14,7 @@ import java.util.List;
 public interface InvoiceService 
 {
 	DataResult<List<InvoiceListDto>> getAll();
-	Result add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException;
+	DataResult<InvoiceDto> add(CreateInvoiceRequest createInvoiceRequest) throws BusinessException;
 	DataResult<InvoiceDto> getById(int id) throws BusinessException;
 	Result update(UpdateInvoiceRequest updateInvoiceRequest) throws BusinessException;
 	Result delete(DeleteInvoiceRequest DeleteInvoiceRequest) throws BusinessException;

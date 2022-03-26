@@ -63,9 +63,9 @@ public class AdditionalServiceController
         return this.additionalServiceService.delete(deleteAdditionalServiceRequest);
     }
 
-    @PostMapping("/calculateAdditionalServicePrice")
+   /*  @PostMapping("/calculateAdditionalServicePrice")
     public DataResult<Double> calculateAdditionalServicePrice(long days, List<Integer> additionalServiceIds) throws BusinessException 
     {
         return this.additionalServiceService.calculateAdditionalServicePrice(days, additionalServiceIds);
-    }
+    } */
 }
